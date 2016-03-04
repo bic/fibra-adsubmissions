@@ -1,0 +1,5 @@
+
+
+./regen.sh
+cd fibra-gen
+env PACKAGE_DIRS=`pwd`/packages meteor 
