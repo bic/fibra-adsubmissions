@@ -1,0 +1,21 @@
+template(name = "submissionsCandidateEditBasics")
+  +bs_form same_ctx collection="submissions" schema_selector=non_draft_selector action=save_as_draft_action id=params.id
+    +field_form_group same_ctx field="title"  
+    +bs_label same_ctx field="submitter_id"
+    +bs_link same_ctx field="submitter_id" action=save_as_draft_action
+      +long_contact_details  
+    +bs_form_group field="promoted_products_description"
+      +bs_label
+      +bs_woofmark
+    h2 Categories
+    .well pick at most 5 Sections from any given category
+    +bs_list same_ctx field="section_ids"
+        +bs_link same_ctx field="section_ids.$" action=save_as_draft_action
+          +bs_autocomplete same_ctx set_id="section_ids.$"
+            +bs_form_group same_ctx field="name"
+                if is_first
+                  label Pick a Section
+                +bs_input same_ctx  crunch_label_with_placeholder=true form_picker=true
+                +bs_help_block
+    +form_help_block
+    +submit_continue_btn

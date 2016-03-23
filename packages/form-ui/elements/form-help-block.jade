@@ -1,0 +1,12 @@
+template(name="form_help_block")
+  with failed_messages
+    p.text-warning Some fields are still not valid. Please Correct them.
+    p.text-warn
+      ul
+        each .
+          li #{.}
+  with success_messages
+    p
+      ul
+        each .
+          li #{.}

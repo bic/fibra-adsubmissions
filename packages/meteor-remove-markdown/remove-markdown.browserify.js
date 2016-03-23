@@ -1,0 +1,1 @@
+removeMd = require('remove-markdown');

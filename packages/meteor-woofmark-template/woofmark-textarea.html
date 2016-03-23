@@ -1,0 +1,22 @@
+<template name="woofmark_textarea">
+  {{#if label_string}}
+    <label {{label_attributes}}>{{label_string}}</label>
+  {{else}}
+    {{#if label_template}}
+      {{>label_template}}
+    {{/if}}
+  {{/if}}
+  <div class="woofmark-container col-sm-12">
+    <textarea {{attributes}}>{{value}}</textarea>
+  </div>
+    {{#if display_word_count}}
+      <div class= "help-block">
+        {{>word_count_display word_count_var}}
+      </div>
+    {{/if}}
+  
+  <div class="next"></div>
+</template>
+<template name="word_count_display">
+  {{#if do_word_count}}words: {{word_count}}{{/if}} - {{#if do_char_count}}chars: {{char_count}}{{/if}}
+</template>

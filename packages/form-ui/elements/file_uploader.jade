@@ -1,0 +1,6 @@
+template(name="file_uploader")
+  .input-div
+    input(type="file" id="field-submission_file_id" class="file" multiple="false" data-show-upload="false" data-show-caption="true" data-field="submission_file_id")
+    input(type="hidden" name="submission_file_id" value="{{submission_by_id.submission_file_id}}")
+    span#help-text.help-block
+    span.help-block#error-text

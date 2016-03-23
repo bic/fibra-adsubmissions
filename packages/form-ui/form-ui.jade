@@ -1,0 +1,47 @@
+template(name='form_ui_input_template')
+  p 
+    | #{helper}
+template(name="bs_form")
+  with remove_from_ctx "standalone" 'onCreated' 'onDestroyed' 'action'
+    if form_dbg
+      .label.label-default ID:#{form_id}
+    if sub_form
+      +UI.contentBlock form_context
+    else
+      form
+        +UI.contentBlock form_context
+template(name="bs_form_group")
+  .form-group.has-feedback(class=classes)
+    +UI.contentBlock same_ctx
+template(name="bs_help_block") 
+  //uncomment the following span to be able to find it using Blaze.findTemplateInstances
+    span 
+  if show_messages
+    if valid
+      .glyphicon.form-control-feedback.glyphicon-ok(aria-hidden="true")
+    else
+      .glyphicon.form-control-feedback.glyphicon-remove(aria-hidden="true")
+      .help-block.with-errors
+        |#{errorMessage}
+  if info
+    .help-block
+      |#{info}
+template(name="bs_input")  
+  if show_remove_btn
+    .input-group
+      input.reactive-element.form-control(type=text id=field  $dyn=form_control_attributes)
+      .input-group-btn
+        button.btn.btn-warning.text-danger.btn-remove(type="button")
+          .glyphicon.glyphicon-trash
+  else
+    input.reactive-element.form-control(type=text id=field  $dyn=form_control_attributes) 
+  
+
+template(name="bs_woofmark")
+  .has-feedback(class="{{classes valid=valid changed=changed}}")
+    with woofmark_textarea_context value
+      +woofmark_textarea 
+    with help_block_context
+      +bs_help_block
+
+     

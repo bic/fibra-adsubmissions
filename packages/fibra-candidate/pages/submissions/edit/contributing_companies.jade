@@ -1,0 +1,47 @@
+template(name="submissionsCandidateEditProduction")
+  h1 Production Company
+  +contributing_companies type="production" schema_selector=non_draft_selector action=save_as_draft_action collection='submissions'
+template(name="submissionsCandidateEditMedia")
+  h1 Media Company
+  +contributing_companies type="media" schema_selector=non_draft_selector action=save_as_draft_action collection='submissions'
+template(name="other_contributors_btn")
+  |More contributors
+
+template(name="submissionsCandidateEditOtherContributors")
+  h1 More Companies
+  if has_companies
+    each data.other_companies
+      .well
+        |#role
+  else
+    .well
+      | To add more companies select their role and click add
+      
+      p
+        .form-group.form-inline
+          label Company Role
+            input.form-control(type=text)
+          .btn.btn-lg.btn-primary
+            .glyphicon.glyphicon-plus
+            | Add a Company
+
+
+
+
+
+template(name="contributing_companies")
+  +bs_form
+    +bs_link same_ctx field=company_id_field_name
+      +long_contact_details
+    with same_ctx field=team_members_field_name
+      h2 
+        +bs_label
+        //Production company Team Members
+      +people_role_list
+    with same_ctx field = designated_contact
+      h2 
+        +bs_label
+      +bs_link
+        +long_contact_details
+    +submit_continue_btn
+    +form_help_block

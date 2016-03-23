@@ -1,0 +1,43 @@
+template(name="_form_page_template_base")
+  .well.text-danger
+    | This template is meant as a base for other templates
+    em Do not render it but use instead:
+    pre
+      | Template.&lt;my_template&gt;.inheritsHelpersFrom("_form_page_template_base")
+      | Template.&lt;my_template&gt;.inheritsEventsFrom("_form_page_template_base")
+      | Template.&lt;my_template&gt;.inheritsHooksFrom("_form_page_template_base")
+
+template(name="field_form_group")
+  +bs_form_group
+    +bs_label 
+    +bs_input
+    +bs_help_block
+
+template(name="long_contact_details")
+  .row
+    .col-sm-2
+      with same_ctx field= 'is_company' value_ref=is_company_ref show_optional=false
+        +bs_label 
+        +bs_switch
+    if is_company
+      .col-sm-6
+        +bs_autocomplete
+          +field_form_group same_ctx field="name" form_picker=true placeholder="Company Name"
+      .col-sm-4
+        +field_form_group same_ctx field="legal_identifyer"
+    else
+      .col-sm-3
+        +bs_autocomplete
+          +field_form_group same_ctx field="name" form_picker=true
+      .col-sm-2
+        +field_form_group same_ctx field="job_title" 
+      .col-sm-2
+        +field_form_group same_ctx field="email" 
+      .col-sm-3
+        +field_form_group same_ctx field= "phone"
+
+
+template(name="submit_continue_btn")
+  button.btn.btn-lg.submit-partial.pull-right(class=classes)
+    | #{next_name}
+    .glyphicon.glyphicon-menu-right

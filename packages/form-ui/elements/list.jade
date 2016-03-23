@@ -1,0 +1,14 @@
+template(name='bs_list')
+  each repeat min count max
+    if true
+      +bs_form element_sub_form_ctx
+        with remove_from_ctx 'no_db_operations'
+          if list_dbg
+            .label.label-default ID:#{form_id}
+          +UI.contentBlock .
+    else
+      +UI.contentBlock .
+  if show_add_btn
+    button.btn.btn-primary.btn-add
+      .glyphicon.glyphicon-plus 
+      |#{label}

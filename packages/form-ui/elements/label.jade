@@ -1,0 +1,7 @@
+template(name='bs_label')
+  label.control-label($dyn=attrs) 
+    |#{label}
+    with show_optional
+      .label.label-info #{.}
+    with show_required
+      .label.label-info #{.}

@@ -1,0 +1,26 @@
+template(name="SubmissionsCandidateEditFilesUpload")
+  h1 File Upload
+  +file_uploader
+
+  with file
+    ul.list-group
+    each .
+      with FS.GetFile "submission_files" _id
+        li.list-group-item.row
+          
+          .col-md-6
+            .glyphicon.glyphicon-file
+            | #{name}
+            img(src="{{this.url store='thumbnails'}}")
+          .col-md-4
+            unless isUploaded
+              +FS.UploadProgressBar
+          .col-md-2
+            .pull-right
+              .label.label-default #{humanize_filesize}
+              +fs_deletebutton
+                .btn.btn-warning.btn-sm
+                  .glyphicon.glyphicon-trash
+            .clearfix
+template(name="fs_deletebutton")
+  +UI.contentBlock

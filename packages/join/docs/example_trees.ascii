@@ -1,0 +1,4 @@
+[A] -> [B]
+[A] -> [C] -> [A conflicts:lvl 1]
+[C] -> [D]
+[C] -> [A: conflicts lvl:1]

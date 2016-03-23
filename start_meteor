@@ -1,5 +1,11 @@
 
 
 ./regen.sh
+cd kitchen-site-gen; meteor --port 4000 &
+ cd ..
+
+
 cd fibra-gen
-env PACKAGE_DIRS=`pwd`/packages meteor 
+echo PACKAGE_DIRS=PACKAGE_DIRS=`pwd`/../packages:PACKAGE_DIRS=`pwd`/../../fulger/meteor_packages
+env PACKAGE_DIRS=`pwd`/../packages:`pwd`/../../fulger/meteor_packages meteor &
+cd ..

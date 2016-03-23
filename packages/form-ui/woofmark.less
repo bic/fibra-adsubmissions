@@ -1,0 +1,73 @@
+
+@import "{}/client/styles/framework/bootstrap3/custom.bootstrap.less";
+@import "{}/client/custom.bootstrap-switch.import.less";
+//@import "{}/client/styles/styles/theme/bootswatch.import.less";
+.woofmark-mode-wysiwyg{
+  content:"visual"
+}
+
+.woofmark-mode-markdown{
+  content:"text[markdown]"
+}
+.navbar-spacer {
+  height: @navbar-height + @navbar-padding-vertical;
+}
+
+@woofmark-width: 90%;
+.wk-container{
+  .wk-wysiwyg {
+    .form-control;
+  }
+  /*
+  .form-control{
+    outline: none;
+  }*/
+  .navbar{
+    height:@navbar-height;
+  }
+  .wk-wysiwyg:focus{
+    outline:none;
+    //background-color: red;
+  }
+  .wk-wysiwyg{
+    width: @woofmark-width ;
+    height:auto;
+  }
+  textarea {
+    width: @woofmark-width !important;
+    height:auto;
+  }
+
+  .wk-wysiwyg-placeholder{
+    left:2em;
+  }
+  
+  .wk-command.woofmark-mode-bold{
+    font-weight: bold;
+  }
+  .wk-command.woofmark-mode-italic{
+    font-style: italic;
+  }
+
+  /*.wk-hide{
+    display:inherit !important;
+  }*/
+
+}
+/*
+.form-control-feedback{
+    right:30px !important;
+}
+*/
+// See http://stackoverflow.com/questions/21029129/create-an-inline-form-with-input-groups-bootstrap second answer
+/*
+.input-group {
+    display: inline-table;
+    vertical-align: middle;
+
+    .input-group-addon,
+    .input-group-btn,
+    .form-control {
+        width: auto !important;
+    }
+}*/

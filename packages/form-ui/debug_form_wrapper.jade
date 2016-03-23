@@ -1,0 +1,6 @@
+template(name="debug_form_wrapper")
+  +UI.contentBlock
+  if form
+    .well
+      pre
+        |#{debug_json}

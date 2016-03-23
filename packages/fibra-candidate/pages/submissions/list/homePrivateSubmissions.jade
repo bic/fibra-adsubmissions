@@ -1,0 +1,20 @@
+template(name="homePrivateSubmissions")
+  h1 Current Submissions
+  with submission_list  
+    ul.list-group
+      each .
+        +submission_link
+  else
+    .well
+      | You have no Current submissions.
+      .pull-right
+          a.btn.btn-primary.btn-lg(href="/submissions/candidate_edit/basics")
+            .glyphicon.glyphicon-plus
+            | Add a Submission
+      .clearfix
+template(name="submission_link")
+    li.list-group-item
+      a(href= "{{pathFor edit_link data=edit_data}}")
+        |#{title}
+      if draft
+        .pull-right.label.label-default draft
