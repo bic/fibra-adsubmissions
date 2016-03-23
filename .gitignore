@@ -1,2 +1,8 @@
-fibra-gen/.meteor
 fibra-gen
+fibra-gen-save
+kitchen-site-gen
+packages/meteor-megamark/.npm
+packages/meteor-horsey/.npm
+packages/meteor-remove-markdown/.npm
+packages/meteor-domador/.npm
+kitchen-site
