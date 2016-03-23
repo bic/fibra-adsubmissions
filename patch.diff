@@ -1,0 +1,26 @@
+--- fibra-gen/lib/object_utils.coffee	2016-03-04 14:13:25.000000000 +0200
++++ fibra-gen/lib/object_utils.coffee	2016-03-04 14:20:11.000000000 +0200
+@@ -59,13 +59,13 @@
+     if fileType == 'csv'
+       columnSeparator = ','
+     if fileType == 'tsv'
+-      columnSeparator = '\u9'
++      columnSeparator = '\u0009'
+     _.each exportFields, (field, i) ->
+       if i > 0
+         str = str + columnSeparator
+       str = str + '"' + field + '"'
+       return
+-    str = str + '\ud\n'
++    str = str + '\u000d\n'
+     _.each data, (doc) ->
+       _.each exportFields, (field, i) ->
+         if i > 0
+@@ -77,6 +77,6 @@
+         else
+           str = str + '"' + value + '"'
+         return
+-      str = str + '\ud\n'
++      str = str + '\u000d\n'
+       return
+   str
