@@ -1,8 +1,8 @@
 template(name="submissionsCandidateEditProduction")
-  h1 Production Company
+  h2 Production Company
   +contributing_companies type="production" schema_selector=non_draft_selector action=save_as_draft_action collection='submissions'
 template(name="submissionsCandidateEditMedia")
-  h1 Media Company
+  h2 Media Company
   +contributing_companies type="media" schema_selector=non_draft_selector action=save_as_draft_action collection='submissions'
 template(name="other_contributors_btn")
   |More contributors
@@ -33,14 +33,12 @@ template(name="contributing_companies")
   +bs_form
     +bs_link same_ctx field=company_id_field_name
       +long_contact_details
-    with same_ctx field=team_members_field_name
-      h2 
-        +bs_label
+    with same_ctx field=team_members_field_name 
+      +bs_label
         //Production company Team Members
       +people_role_list
     with same_ctx field = designated_contact
-      h2 
-        +bs_label
+      +bs_label
       +bs_link
         +long_contact_details
     +submit_continue_btn

@@ -45,6 +45,7 @@ Package.onUse(function(api) {
   //page templates
   api.addPages([
     '_base',
+    '_people_role_list',
     'basics',
     'credits',
     'contributing_companies',

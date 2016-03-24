@@ -6,3 +6,4 @@ packages/meteor-horsey/.npm
 packages/meteor-remove-markdown/.npm
 packages/meteor-domador/.npm
 kitchen-site
+fibra-deploy*

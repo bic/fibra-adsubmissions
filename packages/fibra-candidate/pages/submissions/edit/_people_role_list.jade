@@ -1,0 +1,30 @@
+template(name='people_role_list')
+  // Note that the field argument must be supplied to the tmpl
+  +bs_list
+    with same_ctx show_remove_btn=false 
+      .row
+        .col-md-2
+          if is_first
+            label(for="entry-number") Entry#
+          .form-inline
+            #entry-number.form-control-static
+              |Nr. #{entry_number}
+            if show_remove
+              button.btn.btn-default.btn-remove(class=btn_remove_disabled_class)
+                .glyphicon.glyphicon-trash
+
+        .col-md-6
+          +bs_autocomplete 
+            +bs_form_group same_ctx field=role_field_name form_picker=true  
+              if is_first
+                +bs_label    
+              +bs_input
+              +bs_help_block
+        .col-md-4
+          +bs_link same_ctx field= link_field_name
+            +bs_form_group same_ctx field= 'name'
+              if is_first
+                +bs_label 
+              +bs_input
+              +bs_help_block
+  .clearfix

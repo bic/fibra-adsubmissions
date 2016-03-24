@@ -1,10 +1,11 @@
 template(name = "submissionsCandidateEditBasics")
   +bs_form same_ctx collection="submissions" schema_selector=non_draft_selector action=save_as_draft_action id=params.id
+    h2 Base information
     +field_form_group same_ctx field="title"  
     +bs_label same_ctx field="submitter_id"
-    +bs_link same_ctx field="submitter_id" action=save_as_draft_action
+    +bs_link same_ctx field="submitter_id" 
       +long_contact_details  
-    +bs_form_group field="promoted_products_description"
+    +bs_form_group same_ctx field="promoted_products_description"
       +bs_label
       +bs_woofmark
     h2 Categories

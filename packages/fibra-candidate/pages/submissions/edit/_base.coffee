@@ -45,9 +45,8 @@ do(tmpl= Template._form_page_template_base)->
         router.setParams _.extend router.params, 
             id:id
 
-  Meteor.startup ->
-    helpers.schemas= Schemas
-    tmpl.helpers helpers
+  
+  tmpl.helpers helpers
 
 do(tmpl= Template.submit_continue_btn)->
   tmpl.onCreated ->
