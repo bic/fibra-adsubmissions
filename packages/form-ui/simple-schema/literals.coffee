@@ -30,6 +30,16 @@ share.grouped_selections_list= [
     ]
   }
   {
+    'optgroup': 'RADIO'
+    'options': [
+      {
+        'name': 'RADIO'
+        'id': 'Eo2f4yR4zSCSkhaJu'
+        'value': '2 RADIO'
+      }
+    ]
+  }
+  {
     'optgroup': 'PRINT'
     'options': [
       {
@@ -87,6 +97,11 @@ share.grouped_selections_list= [
         'id': 'suu599wEWqx7a3MjJ'
         'value': '4.5 CRAFT - Sound Design'
       }
+      {
+        'name': 'Best Use of Technology'
+        'id': 'wPJtBLqA7WHrSQQ8A'
+        'value': '4.6 CRAFT - Best Use of Technology'
+      }
     ]
   }
   {
@@ -125,6 +140,16 @@ share.grouped_selections_list= [
     ]
   }
   {
+    'optgroup': 'INTEGRATED'
+    'options': [
+      {
+        'name': 'INTEGRATED'
+        'id': 'BWSbbuhaiT2SbWLxa'
+        'value': '6 INTEGRATED'
+      }
+    ]
+  }
+  {
     'optgroup': 'MEDIA'
     'options': [
       {
@@ -151,6 +176,16 @@ share.grouped_selections_list= [
         'name': 'Special Projects'
         'id': 'AW3iRFCpwF2bktrs4'
         'value': '8.2 OUTDOOR - Special Projects'
+      }
+    ]
+  }
+  {
+    'optgroup': 'NON-PROFIT'
+    'options': [
+      {
+        'name': 'NON-PROFIT'
+        'id': 'G3743SZxFxCRy9h92'
+        'value': '9 NON-PROFIT'
       }
     ]
   }
@@ -196,6 +231,16 @@ share.grouped_selections_list= [
         'name': 'Brand Promotions'
         'id': '27w62wHPpuXLzNQEc'
         'value': '11.3 PROMO & ACTIVATION - Brand Promotions'
+      }
+    ]
+  }
+  {
+    'optgroup': 'PRODUCT DESIGN'
+    'options': [
+      {
+        'name': 'PRODUCT DESIGN'
+        'id': 'LXPwWNTj2fD3TuMAN'
+        'value': '12 PRODUCT DESIGN'
       }
     ]
   }

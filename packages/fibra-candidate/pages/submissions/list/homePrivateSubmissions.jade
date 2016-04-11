@@ -1,9 +1,22 @@
+
+template(name="account_alerts")
+  if show_profile_alert
+    .alert.alert-warning
+      .glyphicon.glyphicon-warning-sign
+      | Please don't forget to enter your invoicing data and Agency/Freelancer details in the 
+      a(href='{{pathFor "user_settings"}}')
+        code
+            |#{userEmail}
+            .glyphicon.glyphicon-chevron-right
+            |Settings
+      |menu!
+      .btn.btn-xs.btn-default.pull-right.do-dismiss Dismiss
+      .clearfix
 template(name="homePrivateSubmissions")
+  
   h1 Current Submissions
-  if has_trashed_items
-    .btn.btn-default.toggle-trashed
-      |#{trash_btn_label}
-    
+  
+  +account_alerts
   with submission_list  
     ul.list-group
       each .
@@ -16,6 +29,9 @@ template(name="homePrivateSubmissions")
             .glyphicon.glyphicon-plus
             | Add a Submission
       .clearfix
+  if has_trashed_items
+    .btn.btn-default.toggle-trashed
+      |#{trash_btn_label}
   +new_submission
 template(name="new_submission")
   a.btn.btn-lg.btn-primary.pull-right(href= "{{pathFor 'submissions.candidate_edit.basics' id='new'}}" )
@@ -35,10 +51,10 @@ template(name="submission_link")
           .glyphicon.glyphicon-eye-open
       .col-md-3
         if review_requested
-          .label.label-info Review requested #{review_request_time}
+          .label.label-info Submitted for review #{review_request_time}
           unless retract_confirm
             .btn.btn-default.btn-sm.do-confirm-unrequest-review
-              | Retract Request
+              | Retract Submission
           else
             table.table.table-condensed
               tbody
@@ -55,7 +71,7 @@ template(name="submission_link")
             
         else
           .btn.btn-primary.do-request-review
-            | Request Review
+            | Submit for Review
       .col-md-2
         if trashed
           .btn.btn-default.pull-right.do-untrash

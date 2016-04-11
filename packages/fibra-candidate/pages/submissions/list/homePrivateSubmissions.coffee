@@ -1,3 +1,16 @@
+_=lodash
+do(tmpl= Template.account_alerts)->
+  tmpl.helpers
+    show_profile_alert:->
+      doc= Meteor.users.findOne Meteor.userId()
+      unless _.get(doc,'profile.company' ) and doc.profile?.is_company?
+        unless _.get doc , 'profile.hints.dismiss_profile_details' 
+          return true
+  tmpl.events
+    'click .do-dismiss':(e,tmpl)->
+      Meteor.users.update Meteor.userId(),
+        $set: 
+          'profile.hints.dismiss_profile_details':true
 do(tmpl=Template.homePrivateSubmissions)->
   tmpl.onCreated ->
     
