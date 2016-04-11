@@ -1,2 +1,26 @@
 template(name='submissionsCandidateEditPreview')
   +preview_all data=data
+  a.do-whats-next(href="#") Whats next ?
+  a.btn.btn-primary.btn-lg.pull-right(href='/submissions/candidate_edit/all_submissions') Go to All Submissions
+
+template(name='whats_next_preview')
+  .modal.fade(tabindex="-1")
+    .modal-dialog
+      .modal-content
+        .modal-header
+          button.close(type="button" data-dismiss="modal" aria-label="Close")
+           span(aria-hidden="true") &times;
+          h1.modal-title Congrats!
+        .modal-body
+          p You have gone through all steps needed to edit a Submission.
+          p All Submissions are easily available by clicking on 
+            a(href='/submissions/candidate_edit/all_submissions/') All Submissions
+            | in the left hand Sidebar.
+          p That's also the place to start adding and modifying any of
+            a(href='/submissions/candidate_edit/all_submissions/') your Submissions
+        .modal-footer
+          .form-group
+            label 
+              input.remind-again(type="checkbox" $dyn=checkbox_dyn)
+              |remind me again
+          button.btn.btn-primary(type="button" data-dismiss="modal") Ok
