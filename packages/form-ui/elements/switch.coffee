@@ -51,7 +51,7 @@ do(tmpl= Template.bs_switch)->
 
     @autorun (c)=>
       # this compiles the options
-      debugger
+      #debugger
       schema_options = share.schema_for_template_inst(this)?.input_spec?.switch
       data= Template.currentData()
       if schema_options and data

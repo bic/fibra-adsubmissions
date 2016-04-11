@@ -1,0 +1,19 @@
+template(name="afFormGroup_fibra_inline")
+  .form-group(class=classes data-required="{{required}}" $dyn=afFormGroupAtts)
+    unless skipLabel
+      label($dyn=bsFieldLabelAtts)
+        if this.labelText
+          | {{this.labelText }}
+        else
+          | {{afFieldLabelText name=this.name }}
+    if show_remove_btn
+      .input-group
+        .input-group-btn
+          .btn.btn-primary.autoform-remove-item
+            .glyphicon.glyphicon-minus        
+        +afFieldInput afFieldInputAtts
+    else
+      +afFieldInput afFieldInputAtts
+    span.help-block 
+      | {{afFieldMessage name=this.name}}
+

@@ -1,0 +1,26 @@
+template(name="presentation_display")
+  
+  +bs_panel same_ctx title='Presentation'
+    if data.context_description
+      h4 {{field_name 'context_description'}}
+      +markdown
+        {{data.context_description}}
+    if data.campaign_summary
+      h4 {{field_name 'campaign_summary'}}
+      +markdown
+        {{data.campaign_summary}}
+    else
+      +bs_alert
+        | Campaign summary is missing!
+    if data.target_audience
+      h4 {{field_name 'target_audience'}}
+      +markdown
+        {{data.target_audience}}
+    if data.results_summary
+      h4 {{field_name 'results_summary'}}
+      +markdown
+        {{data.results_summary}}
+    if data.confidential_info
+      h4 {{field_name 'confidential_info'}}
+      +markdown
+        {{data.confidential_info}}

@@ -1,7 +1,7 @@
 
 
 
-Template.woofmark_textarea.default_options= default_options = 
+Template.woofmark_textarea.default_options= default_options =  woofmark.default_options = 
   type : "text"
   placeholder: "Start typing ..."
   editor_only_with_focus:true
@@ -204,7 +204,6 @@ do(tmpl= Template.woofmark_textarea) ->
     if @wordcounter?
       #initial wordcount setting
       word_count_func this
-    debugger
     if @options.sync_text_area
       #TODO: This misses all other events
       $(@find('.woofmark-container')).on 'keyup', (e)=> 

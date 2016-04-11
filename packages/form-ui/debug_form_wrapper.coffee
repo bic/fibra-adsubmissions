@@ -13,9 +13,15 @@ do (tmpl=Template.debug_form_wrapper)=>
       @value = form_tmpl.reactiveForms.validatedValues
 
   helpers =
+    show_debuug: (inst)->
+      return Session.get 'debug'
     form: (inst)->
       inst.form.get()
     debug_json: (inst)->
+      
+      for form in @instances
+        vals = form.reactiveForms.elementValues()
+
       inst.value_change_dep.depend()
       JSON.stringify inst.value, null, 2
   tmpl.instance_helpers helpers
@@ -25,7 +31,10 @@ do (tmpl=Template.debug_form_wrapper)=>
   tmpl.onRendered ->
     # Search for first form direcly beneath this (forms beneath other forms are ignored)
     debugger
-    instances = Blaze.findTemplateInstances('bs_form');
+    @instances = Blaze.findTemplateInstances('bs_form');
+    
+
+    return 
     found = false
     for inst in instances
       view = inst.view.parentView 

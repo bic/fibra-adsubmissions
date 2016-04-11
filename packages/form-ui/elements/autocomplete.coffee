@@ -61,8 +61,8 @@ do(tmpl= Template.bs_autocomplete)->
           link_template = link_ctx.template
           #take autocomplete preferably from link definition
           autocomplete= link_ctx.input_spec?.autocomplete
-          #otherwhise from field definition on the linked entity
-          autocomplete?= field_def.input_spec?.autocomplete
+        #otherwhise from field definition on the linked entity
+        autocomplete?= field_def.input_spec?.autocomplete
         if autocomplete? 
           if _.isObject(autocomplete) and autocomplete?.type == 'horsey'
             horsey(elm, autocomplete)
@@ -74,6 +74,7 @@ do(tmpl= Template.bs_autocomplete)->
         console.warn "Could not find reactive element context for #{elm}. Is it registered with form:templates?"
   tmpl.events
     "horsey-selected": (e,tmpl)->
+      debugger
       input_text = e.target.value
       ###
       ## horsey does not deliver the text, just the value, so

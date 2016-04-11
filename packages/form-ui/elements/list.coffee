@@ -1,8 +1,39 @@
 _= lodash
 
+
 do(tmpl=Template.bs_list)->
+  ReactiveForms.createElement
+    template: 'bs_list'
+    validationValue: (el, clean, template)->
+        debugger
+
+  # workaround the impossibility of 
   tmpl.onCreated ->
     inst = this
+    @update_pull=[]
+    @update_pull_cb_handle= @reactiveForms.parentData.templateInstance.on_update ( collection,id,mod, schema_selector )=>
+      path= form_ui.data_path (inst.view)
+      debugger
+      old_vals= collection.findOne(id)
+      arr = _.get old_vals , path
+      for elm, i in arr
+        if @update_pull.indexOf(i) > -1
+          arr[i]=null
+      debugger
+      arr = _.compact arr
+
+      mod = 
+        $set: _.fromPairs [[path.join('.'),arr]]
+      _.defaults mod.$set, schema_selector
+      collection.update id, mod, (err,success)=>
+        if err
+          form_ui.err "Error pulling indices #{@update_pull.join(',')} from path", err
+        else
+          @update_pull=[]
+  tmpl.onDestroyed ->
+    @update_pull_cb_handle.remove()
+
+  tmpl.onCreated ->
     @child_tracker =
       add: (subelement)->
         @_children_autorun.push Tracker.autorun ->
@@ -63,7 +94,9 @@ do(tmpl=Template.bs_list)->
         
         my_value = _this.reactiveForms.value.get()
         if my_value? and not _.isArray my_value
+          debugger
           form_ui.except( "my value is not an array! value:" , my_value)
+
         if my_value? and my_value.length
           # if the current value is 0 still show a form
           count= my_value.length
@@ -125,50 +158,56 @@ do(tmpl=Template.bs_list)->
     element_sub_form_ctx:(inst)->
       index = @index
       count = @count
-      ret = _.extend {}, this ,
+      ret = _.extend {},this,
+        field: do => 
+          debugger
+          @field+".$"
         schema: do =>
-          unless this.field
-            form_ui.err "No field supplied, thus cannot pick my field and this list's contents wil contain nothing"
-          keys = _.keys(inst.reactiveForms.schema?.schema()).filter  (key)=>key.startsWith this.field 
-          inst.reactiveForms.schema?.pick( keys)
+          debugger
+          unless @field
+            form_ui.err "No field supplied, thus cannot pick my field and this list's contents will contain nothing"
+          if inst.reactiveForms.schema?
+            schema_def = _.pickBy inst.reactiveForms.schema.schema(), (val,key)=>
+              key.startsWith(@field) or key=='_id'
+            return new SimpleSchema schema_def
         collection: @collection or inst.reactiveForms.parentData.templateInstance.collection
+        id: inst.reactiveForms.parentData.id
         #action:(elm,callbacks,changed)->
         #  debugger
         is_first: @index == 0
         is_last: @index == inst.counter.get('count')
         no_db_operations:true
+        data: do =>
+          data = @data or {}
+          val = inst.reactiveForms.value.get()
+          data_path= form_ui.data_path()
+          debugger
+          _.set data, data_path, val
+          console.error 'set data to ' , JSON.stringify val
+          return data
         onCreated: ->
           form = this
           ## this is called by the subform
           this.reactiveForms.setFormDataField = _.wrap  this.reactiveForms.setFormDataField ,   (old,field, value, fromUserEvent)->
+            data_path = form_ui.data_path(Template.instance().view)
+            my_path = form_ui.data_path(inst.view)
+            if my_path[my_path.length-1] >= inst.counter.get('count')
+              console.error "got update from index #{my_path[my_path.length-1]} which is out of scope"
+              return
+            rel_value_path = data_path[my_path.length...]
             old.call this, field ,value, fromUserEvent
             
-            #list template current value
-            current_value= inst.reactiveForms.value.get()
             
-            #make sure array is initialized
-            current_value?=new Array(inst.counter.get 'count')
+            # we give the parent path a different identity in ode
+            
+            cur_value= _.cloneDeep inst.reactiveForms.value.curValue
+            cur_value ?= new Array(inst.counter.get('count'))
+            _.set cur_value, rel_value_path, value
+            inst.reactiveForms.setValue cur_value , fromUserEvent
+            this.validate()
 
-            # get the values of the subform
-            list_elm = @validatedValues 
-            # now strip off the path up to the list field
-            for key in inst.reactiveForms.field.split '.' 
-              if list_elm? 
-                parent = list_elm
-                parent_key= key
-                list_elm=list_elm[key]
-            #remove the root $ (this is a list template) 
-            if list_elm? && '$' of list_elm
-              list_elm=list_elm['$']
-            #now merge the object. Not quite sure here that this is nesessary
-            #set might be enough
-            
-            current_value[index]=list_elm
-            parent[parent_key]=current_value
-            #  _.merge current_value[index], list_elm
-            
-            #Finally set the list template value
-            inst.reactiveForms.setValue current_value, fromUserEvent
+
+        
       if inst.reactiveForms.parentData?.templateInstance
         #his will throw if templateInstance is not set!
         ret.parent_form= inst.reactiveForms.parentData.templateInstance
@@ -207,28 +246,24 @@ do(tmpl=Template.bs_list)->
 
   tmpl.events
     'click .btn.btn-add': (e,inst)->
+      e.preventDefault() # This is not a submit button
       inst.counter.set 'count', inst.counter.get('count')+1
       val = inst.reactiveForms.value.get() 
       if val?
         val.push undefined
         inst.reactiveForms.setValue(val,true)
-      e.preventDefault() # This is not a submit button
+      inst.update_pull = inst.update_pull.filter (x)-> x!= val.length
+      
     'click .btn.btn-remove': (e,inst)->
-      inst.counter.set 'count', Math.max inst.counter.get('min'), inst.counter.get('count')-1
       e.preventDefault()
       view = Blaze.getView(e.currentTarget)
       index = find_index_for_event_origin view , inst
-      Tracker.afterFlush =>
-        # setValue will trigger the link set again. to avoid that first remove the template
-        # and than set the lists value
-        val = inst.reactiveForms.value.get()
-        if val?
-          val = val.filter (elm,idx)->idx !=index
-          inst.reactiveForms.setValue(val,true)
-      #now what to do with the array index
-      
-
-ReactiveForms.createElement
-  template: 'bs_list'
-  validationValue: (el, clean, template)->
+      val = inst.reactiveForms.value.get()
+      val = val.filter (elm,idx)->idx !=index
+      inst.reactiveForms.setValue(val,true)
       debugger
+      if -1 == inst.update_pull.indexOf val.length
+        inst.update_pull.push(val.length);  
+      return
+    
+

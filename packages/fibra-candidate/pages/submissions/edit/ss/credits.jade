@@ -1,0 +1,9 @@
+template(name="submissionsCandidateEditCredits")
+  h2 Credits
+  //.well Add people, agencies and team members alike, who you want to give credit for their involvement in this work
+  with qf_env id="submissions_credits" collection='submissions'  
+    +quickForm same_ctx template=template fields=pick_fields.credits buttonContent=false
+    //+autoForm same_ctx template='bootstrap3-inline' class='form-inline' schema=schema validation="keyup"
+      +afArrayField name="credit_contacts" template='bootstrap3-inline'
+    +ss_preview_btn
+    +ss_submit_btn

@@ -1,8 +1,8 @@
 template(name="SubmissionsCandidateEditFilesUpload")
-  h1 File Upload
-  +file_uploader
+  h1 Files Upload
+  //+file_uploader
 
-  with file
+  //with file
     ul.list-group
     each .
       with FS.GetFile "submission_files" _id
@@ -22,5 +22,28 @@ template(name="SubmissionsCandidateEditFilesUpload")
                 .btn.btn-warning.btn-sm
                   .glyphicon.glyphicon-trash
             .clearfix
+  +file_management
 template(name="fs_deletebutton")
   +UI.contentBlock
+template(name="file_handling")
+
+template(name="file_management")
+  +debug_form_wrapper
+    +bs_form schema_selector=non_draft_selector action=save_as_draft_action collection='submissions' id=params.id
+      +bs_list same_ctx field='files'
+          .well
+            +bs_link same_ctx field='files.$.file_id'
+              +file_uploader
+            .col-md-4
+              with same_ctx field='files.$.is_case_file'
+                +bs_switch
+            .col-md-12
+              with same_ctx field='files.$.translation'
+                +bs_label 
+                +bs_woofmark
+                +bs_help_block
+            .clearfix
+      .row
+        +form_help_block
+        +submit_continue_btn
+        .clearfix

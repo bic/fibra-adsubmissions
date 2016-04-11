@@ -1,0 +1,54 @@
+
+template(name='invoice_data')
+  with invoice_ctx
+    +autoForm
+      .panel.panel-default
+        .panel-heading
+          .h4.panel-title Invoice Data
+          
+          .form-group.col-md-4
+            label VAT/TVA
+            .input-group
+              +afFieldInput autocomplete="off" name='company.cif'
+              .input-group-addon
+                if searching_company_info
+                    .glyphicon.glyphicon-refresh.glyphicon-refresh-animate
+                else if invalid_cif
+                  .text-danger
+                    .glyphicon.glyphicon-remove
+                else if valid_cif
+                  span.text-success
+                    .glyphicon.glyphicon-ok
+                else
+                  .glyphicon.glyphicon-ok
+          +afFormGroup formgroup-class='col-md-4' name='company.country'
+          .col-md-4
+            .btn.btn-default.do-remove.pull-right(class="{{hide_classes}}") Remove
+            .clearfix
+          .clearfix
+        with replacement
+          .well
+            | The entered Vat-ID has been found in the 
+            a(href = 'http://openapi.ro' target="_blank") OpenApi database:
+            dl.dl-horizontal
+              dt Name:
+              dd #{name}
+              dt VAT Status:
+              dd #{vat_to_text}
+              dt Street/No
+              dd #{address}
+              dt City
+              dd #{city}
+              dt Zip
+              dd #{zip}
+            .btn.btn-default.do-replace Replace Existing Data
+            .btn.btn-default.do-ignore Ignore
+
+        .panel-body(class="{{hide_classes}}")
+          +afFormGroup formgroup-class='col-md-8' name='company.name'
+          +afFormGroup formgroup-class='col-md-4' name='company.vat'
+          +afFormGroup formgroup-class= 'col-md-12' name='company.address'
+          +afFormGroup formgroup-class= 'col-md-6' name='company.city'
+          +afFormGroup formgroup-class='col-md-6' name='company.zip'
+          button.pull-right.btn.btn-lg.btn-primary(type="submit") Save Invoice Data
+          .clearfix

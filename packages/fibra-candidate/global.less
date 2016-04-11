@@ -1,0 +1,53 @@
+@import "{}/client/styles/framework/bootstrap3/custom.bootstrap.less";
+@import "{}/client/custom.bootstrap-switch.import.less";
+
+/*.autoform-array-item-body{
+  .panel-heading{
+    display:none;
+  }
+};*/
+.input-group {
+  .input-group-btn {
+    vertical-align: top;
+  }
+  .selectize-input{
+    z-index: initial;
+  }
+  .selectize-dropdown.single.form-control {
+    position:static;
+    //z-index:3 !important;
+  }
+}
+button[type='submit'] {
+  text-transform: uppercase;
+}
+label {
+  text-transform: uppercase;
+}
+.glyphicon-refresh-animate {
+    -animation: spin .7s infinite linear;
+    -webkit-animation: spin2 .7s infinite linear;
+}
+
+@-webkit-keyframes spin2 {
+    from { -webkit-transform: rotate(0deg);}
+    to { -webkit-transform: rotate(360deg);}
+}
+
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg);}
+    to { transform: scale(1) rotate(360deg);}
+}
+
+.file-content-display {
+height: 450px;
+  .img-responsive {
+      margin:auto;
+      display: block;
+      height:initial; //auto;
+      width: auto;
+      max-width:initial;// 100%;
+      max-height: 100%
+}
+}
+

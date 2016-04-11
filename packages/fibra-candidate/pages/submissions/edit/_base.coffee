@@ -1,12 +1,15 @@
 
-do (tmpl= Template.long_contact_details)->
+do(tmpl= Template.long_contact_details)->
   tmpl.onCreated ->
-    @is_company = new ReactiveVar(false)
+    @value_refs= @data?.value_refs or {}
+    unless @value_refs.is_company?
+      @value_refs.is_company= new ReactiveVar(false)
+
 
   tmpl.instance_helpers
     is_company: (inst)->
-      inst.is_company.get()
-    is_company_ref: (inst)-> inst.is_company
+      inst.value_refs.is_company.get()
+    value_refs: (inst)->inst.value_refs
 
 do(tmpl= Template._form_page_template_base)->
   helpers =
@@ -25,6 +28,7 @@ do(tmpl= Template._form_page_template_base)->
 
         wrapper= (func)=>
           ->
+            debugger
             if draft_was_not_defined
               delete @draft
             else
@@ -52,19 +56,22 @@ do(tmpl= Template.submit_continue_btn)->
   tmpl.onCreated ->
     @target_name= new ReactiveVar()
     @autorun (c)=>
-      if Router.current().isReady()
-        path= Router.current().location.get().path
-        Tracker.afterFlush =>
-          nextelm = $('.side-bar-item.active').next()
-          link = nextelm.find('a').attr('href')
-          if link?
-            ## set the success action to continue
-            registration = @reactiveForms.parentData.templateInstance.on_success ->
-              Router.go link
-              #and only run once
-              registration.remove()
-          title = $('.side-bar-item.active').next().find('.item-title')
-          @target_name.set title.text()
+      #if Router.current().isReady()
+      path= Router.current().location.get().path
+      Tracker.afterFlush =>
+        nextelm = $('.side-bar-item.active').next()
+        link = nextelm.find('a').attr('href')
+        if link?
+          ## set the success action to continue
+          registration = @reactiveForms.parentData.templateInstance.on_success =>
+            inst = @reactiveForms.parentData.templateInstance
+            debugger
+            id = inst.id.get()
+            Router.go link.replace /\/new\//, "/#{id}/"
+            #and only run once
+            registration.remove()
+        title = $('.side-bar-item.active').next().find('.item-title')
+        @target_name.set title.text()
 
   tmpl.instance_helpers 
     next_name: ->

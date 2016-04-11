@@ -22,7 +22,8 @@ Package.onUse(function(api) {
     'pba:domador',
     'pba:horsey',
     'pba:horsey-template',
-    'nemo64:bootstrap@3.3.5_2', 
+    'nemo64:bootstrap@3.3.5_2',
+
     
     'templates:forms@2.1.2',
     'reactive-var',
@@ -37,7 +38,10 @@ Package.onUse(function(api) {
     'check',
     'aldeed:simple-schema@1.5.3',
     'pba:remove-markdown',
-    'meteorhacks:zones@1.6.0'
+    'tmeasday:check-npm-versions',
+    //'meteorhacks:zones@1.6.0',
+    'vsivsi:file-collection@1.3.2',
+    'aldeed:autoform@5.8.1', 
     ],['client','server'])
   api.use(['kitchen-settings', 'pba:join'],['client', 'server']);
   api.use("cfs:standard-packages@0.5.9");
@@ -50,11 +54,15 @@ Package.onUse(function(api) {
 
   api.export('form_ui');
   api.addFiles([
+    
     'exports.coffee',
     'share.coffee',
+    'simple-schema/literals.coffee',  
     'simple-schema/schema_supplement.coffee',
-    'simple-schema/join.coffee',
-    'simple-schema/autocomplete.coffee',
+    'simple-schema/autoforms.coffee',
+    'simple-schema/id_fields.coffee',
+    //'simple-schema/join.coffee',
+    //'simple-schema/autocomplete.coffee',
 
     'simple-schema/draft-types.coffee', 
     /* 
@@ -71,6 +79,7 @@ Package.onUse(function(api) {
     'form-group.jade',
     'form-ui.jade', 
     'form-ui.coffee',  
+    'templates_forms_customize.coffee',
     'woofmark.less', 
     'woofmark_strings.coffee',
 

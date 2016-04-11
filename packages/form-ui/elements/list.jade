@@ -5,6 +5,7 @@ template(name='bs_list')
         with remove_from_ctx 'no_db_operations'
           if list_dbg
             .label.label-default ID:#{form_id}
+            .label.label-default field: #{field}
           +UI.contentBlock .
     else
       +UI.contentBlock .

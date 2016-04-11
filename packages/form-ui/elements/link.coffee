@@ -5,6 +5,15 @@ do(tmpl=Template.bs_link)->
         collection:  inst.link_collection
         schema_selector:inst.link_schema_selector
         id:inst.link_id
+        onCreated: ->
+          inst.linked_form = this
+          @autorun (c)=>
+            debugger
+            @id.dep.depend()
+            unless c.firstRun
+              @data.data = Template.currentData().data
+              @reactiveForms.resetForm()
+        data: share.collection_for_name(inst.link_collection).findOne(inst.link_id.get())
       if inst.reactiveForms.parentData?
         ret.parent_form= inst.reactiveForms.parentData.templateInstance
       return ret
@@ -31,7 +40,8 @@ do(tmpl=Template.bs_link)->
               break
             else
               form = form.reactiveForms.parent_form
-        link_schema = collection.simpleSchema(@link_schema_selector)
+        link_schema = join.config.schema_for_doc collection, @link_schema_selector
+
       unless link_schema?
         console.error "bs_link field=#{@data.field}: no link_schema supplied as an argument, or found in field's schema definition (looking for a 'join' schema key)"
         console.error "bs_link field=#{@data.field}: Not knowing what to do else, just forwarding whatever schema is in my context"
@@ -41,22 +51,46 @@ do(tmpl=Template.bs_link)->
     
 
    
-    @link_id = new ReactiveVar("new")
-    path = form_ui.data_path(this.view, true)
-    id= _.get @data.data, path
-    
-    if id? and id1= 'new' # When the data is not in the database yet this should not replace the "new"
+    @link_id = new ReactiveVar()
+    @autorun (c)=>
+      data= Template.currentData()
+      path = form_ui.data_path(this.view, true)
+      id= _.get data.data, path
       @link_id.set id
 
+    if this.data.schema?.schema?()[this.data.field].join?.deny_insert
+      @autorun (c)=>
+        id = @link_id.get()
+        debugger
+        unless id? and id != 'new'
+          @invalid_key=@reactiveForms.schemaContext.addInvalidKeys [
+            name:this.data.field
+            type: "mustChoose"
+            value: id
+          ]
+        else
+          debugger
+
+
+
   tmpl.onRendered ->
+    
+   
+
+
+
+    #@autorun (c)=>
+    #  unless 
+    elm = $(@find('input[type="hidden"]'))
     @autorun (c)=>
-      new_val = @link_id.get()
-      elm = $(@find('input[type="hidden"]'))
-      elm.val new_val
-      #unless c.firstRun
-      console.log('triggering link.changed for new value', @link_id.get())
-      elm.trigger('link.changed')
-  
+      id = @link_id.get()
+      if elm.val() != id
+        elm.val id
+        debugger
+        console.log('triggering link.changed for new value', @link_id.get())
+        elm.trigger('link.changed')
+
+
 
   tmpl.onCreated ->
     console.log("created" , this)
@@ -66,4 +100,5 @@ do(tmpl=Template.bs_link)->
 
 ReactiveForms.createElement
   template: 'bs_link'
+
   validationEvent: 'link.changed'

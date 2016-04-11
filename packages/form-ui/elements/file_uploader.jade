@@ -1,6 +1,19 @@
 template(name="file_uploader")
-  .input-div
-    input(type="file" id="field-submission_file_id" class="file" multiple="false" data-show-upload="false" data-show-caption="true" data-field="submission_file_id")
-    input(type="hidden" name="submission_file_id" value="{{submission_by_id.submission_file_id}}")
-    span#help-text.help-block
-    span.help-block#error-text
+  with same_ctx file=file
+    if UI.contentBlock
+      +UI.contentBlock .
+    else 
+      with file         
+        .col-md-4
+          .glyphicon.glyphicon-file
+          | #{name}
+          with file 
+            img(src="{{url store='thumbnails'}}")
+        .col-md-4
+          unless isUploaded
+            +FS.UploadProgressBar
+
+    input.reactive-element(type='hidden')
+    .file_uploader_container(class=hide_upload)
+      .input-div
+        input.file.file_uploader(type="file" id="file-input" multiple="false" data-show-upload="false" data-show-caption="true")

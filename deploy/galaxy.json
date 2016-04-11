@@ -1,0 +1,7 @@
+{
+  "galaxy.meteor.com": {
+    "env": {
+      "MONGO_URL": "mongodb://adsubmission:bubumare@ds011790.mlab.com:11790/adsubmission"
+    }
+  }
+}

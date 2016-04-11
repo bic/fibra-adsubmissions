@@ -1,0 +1,7 @@
+template(name='afJoin')
+  input(type="hidden" value="{{this.value}}" $dyn:{{this.atts}})
+  if Template.contentBlock
+    +autoForm join_form_args
+      +Template.contentBlock .
+  else
+    +quickForm join_form_args

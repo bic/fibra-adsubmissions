@@ -1,0 +1,53 @@
+template(name="_display_base")
+template(name="preview_modal")
+  .modal.fade(tabindex="-1")
+    .modal-dialog.modal-lg
+      .modal-content
+        .modal-header
+          button.close(type="button" data-dismiss="modal" aria-label="Close")
+           span(aria-hidden="true") &times;
+          h1.modal-title Preview
+        .modal-body
+          +Template.dynamic template=template data=data
+        .modal-footer
+          button.btn.btn-default(type="button" data-dismiss="modal") Close
+template(name="object_display")
+  with object_label
+    with ..
+      h4 #{object_label}
+  table.table.table-compact
+    with keys
+      thead
+        tr
+          each .
+            td #{.}
+    tbody
+      each value
+        tr
+          +_object_row_display
+
+
+template(name="_object_row_display")
+  each values
+    td #{.}
+
+template(name= 'object_or_alert')
+  if has_object
+    +object
+  else
+    +bs_alert     
+      |{{object_label}} not set!
+template(name= 'object')
+  with object_ctx
+    +object_display
+    
+template(name='bs_alert')
+  .alert.alert-danger 
+      .glyphicon.glyphicon-warning-sign
+      +Template.contentBlock
+template(name="bs_panel")
+  .panel.panel-default
+    .panel-heading
+      h3.panel-title #{title}
+    .panel-body
+      +Template.contentBlock

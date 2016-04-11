@@ -1,0 +1,16 @@
+template(name="company_display")
+  if have_company
+    +bs_panel title=title
+      with contacts
+        +object_or_alert
+      with designated_contact
+        +object_or_alert
+
+template(name="production_display")
+  +company_display title="Production Company" name='production' data=data
+template(name="media_display")
+  +company_display title="Media Company" name='media' data=data
+template(name="other_companies_display")
+  each company_ctx
+    +company_display 
+      

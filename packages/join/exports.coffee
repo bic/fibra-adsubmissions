@@ -8,7 +8,7 @@ join=
       if typeof collection == 'string'
         Meteor.Collection.get(collection)
       else if join.config.debug and not (collection instanceof Meteor.Collection)
-        console.warn "collection of unlnown type", collection
+        console.warn "collection of unknown type", collection
         collection
       else
         collection

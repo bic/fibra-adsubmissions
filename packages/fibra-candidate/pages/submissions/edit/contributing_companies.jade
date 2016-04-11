@@ -1,45 +1,58 @@
 template(name="submissionsCandidateEditProduction")
   h2 Production Company
-  +contributing_companies type="production" schema_selector=non_draft_selector action=save_as_draft_action collection='submissions'
+  +debug_form_wrapper
+    +bs_form schema_selector=non_draft_selector action=save_as_draft_action collection='submissions' id=params.id
+      +contributing_company same_ctx field="production"
+      +submit_continue_btn
+      +form_help_block
 template(name="submissionsCandidateEditMedia")
   h2 Media Company
-  +contributing_companies type="media" schema_selector=non_draft_selector action=save_as_draft_action collection='submissions'
+  +debug_form_wrapper
+    +bs_form schema_selector=non_draft_selector action=save_as_draft_action collection='submissions' id=params.id
+      +contributing_company same_ctx field="media"
+      +submit_continue_btn
+      +form_help_block
 template(name="other_contributors_btn")
   |More contributors
-
+ 
 template(name="submissionsCandidateEditOtherContributors")
   h1 More Companies
-  if has_companies
-    each data.other_companies
-      .well
-        |#role
-  else
-    .well
-      | To add more companies select their role and click add
-      
-      p
-        .form-group.form-inline
-          label Company Role
-            input.form-control(type=text)
-          .btn.btn-lg.btn-primary
-            .glyphicon.glyphicon-plus
-            | Add a Company
+  +debug_form_wrapper
+    +bs_form schema_selector=non_draft_selector action=save_as_draft_action collection='submissions' id=params.id
+      .panel-group  
+        +bs_list same_ctx field="other_companies"
+          with same_ctx value_refs
+            .panel.panel-default
+              .panel.panel-heading(href="#heading{{index}}")
+                .panel-title
+                  a.collapsed(role="button" data-toggle='collapse' data-parent=".panel-group" href="#collapse{{index}}" aria-controls= "conllapse{{index}}")
+                    | #{company_role_name}
+                  .pull-right
+                    .btn.btn-warning.btn-remove
+                      .glyphicon.glyphicon-trash
+                  .clearfix
+              .panel-collapse.collapse(id="collapse{{index}}") 
+                .panel-body(data-toggle='collapse' data-parent='.panel-group')
+                  +contributing_company same_ctx field="other_companies.$" display_role=true show_remove_btn=false
+        +submit_continue_btn
+        +form_help_block
 
 
 
-
-
-template(name="contributing_companies")
-  +bs_form
-    +bs_link same_ctx field=company_id_field_name
-      +long_contact_details
+template(name="contributing_company")
+  if display_role
+    +bs_autocomplete same_ctx field=role_field_name value_ref=value_refs.role
+      +field_form_group 
+  +bs_link same_ctx field=company_id_field_name
+    +long_contact_details
+  with remove_from_ctx 'value_refs'
     with same_ctx field=team_members_field_name 
-      +bs_label
-        //Production company Team Members
-      +people_role_list
+     
+        +bs_label
+          //Production company Team Members
+        +people_role_list
     with same_ctx field = designated_contact
       +bs_label
       +bs_link
         +long_contact_details
-    +submit_continue_btn
-    +form_help_block
+      

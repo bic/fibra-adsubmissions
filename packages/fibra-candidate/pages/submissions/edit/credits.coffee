@@ -17,5 +17,7 @@ do(tmpl=Template.horsey_test)->
   Meteor.startup ->
     helpers.schemas= Schemas
     tmpl.helpers helpers
+
+
 do(tmpl=Template.credits)->
   tmpl.inheritsHelpersFrom '_form_page_template_base'

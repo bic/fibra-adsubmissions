@@ -16,7 +16,6 @@ do(tmpl=Template.bs_label)->
       ret.for?= @field
       return ret
     show_optional:(inst)->
-      debugger
       if @force_optional?
         return @force_optional
       else if @show_optional?  

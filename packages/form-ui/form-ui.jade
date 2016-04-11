@@ -12,7 +12,7 @@ template(name="bs_form")
         +UI.contentBlock form_context
 template(name="bs_form_group")
   .form-group.has-feedback(class=classes)
-    +UI.contentBlock same_ctx
+    +UI.contentBlock same_ctx data=data
 template(name="bs_help_block") 
   //uncomment the following span to be able to find it using Blaze.findTemplateInstances
     span 

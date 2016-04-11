@@ -1,0 +1,43 @@
+template(name="files_display")
+  with case_files
+    each .
+      +bs_panel
+        +file_display
+        with translation
+          .well
+            p
+              b Translation:
+            |{{this}}
+  else
+    .alert.alert-danger 
+      .glyphicon.glyphicon-warning-sign
+      | No Case files uploaded
+  each other_files
+    +bs_panel
+        +file_display
+        with translation
+          .well
+            p
+              b Translation:
+            |{{this}}
+template(name="file_display")
+  with file
+    .well.file-content-display
+      if isImage
+        img.img-responsive(src=url)
+      else if isVideo 
+        video.img-responsive(controls="controls") 
+          source(src=url)
+          | Your browser does not support the video tag.
+      else if isAudio
+        audio(controls="controls")
+          source(src=url)
+          | Your browser does not support the video tag.
+      else
+        embed(src=url height="100%" width="100%")
+    a.label.label-default(href=url download=name target="_blank")
+      //was name 
+      .glyphicon.glyphicon-download-alt
+      |Download
+    //with file_obj
+

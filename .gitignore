@@ -7,3 +7,5 @@ packages/meteor-remove-markdown/.npm
 packages/meteor-domador/.npm
 kitchen-site
 fibra-deploy*
+fibra-gen-old
+userpasswords.csv

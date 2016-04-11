@@ -259,16 +259,21 @@ Meteor.startup ->
           title: cat_name
         console.warn "Autoadded: ", def.sections[0] 
     else
+      counter=
+        update:0
+        insert:0
       for sec_def in def.sections
         sec=
           draft:false
           name:"#{def.nr}.#{sec_def.nr} #{cat_name} - #{sec_def.title}"
           category_id: cat._id
-        unless db_sec= Sections.findOne sec
+        unless db_sec= Sections.findOne {name: sec.name}
           sec._id = Sections.insert sec
+          counter.insert++
         else Sections.update db_sec._id,
           $set: _.omit sec, '_id'
-
+          counter.update++
+        console.log ("Sections: #{counter.update} updated, #{counter.insert} inserted.")
 
 
 

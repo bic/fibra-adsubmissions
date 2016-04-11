@@ -3,15 +3,22 @@ init_autocomplete = (json)->
   merge_schema = {}
   for col_def in json.collections
     col = share.collection_for_name(col_def.name)
-    schema = col?.simpleSchema?()?.schema()
-    if schema?
+    #schema = col?.simpleSchema?()?.schema()
+    schema= join.config.schema_defs_for_schemas join.config.schemas_for_collection(col)
+    if schema? and schema.length
+      schema = schema[0]
+      #console.log "schemadef for #{col_def.name}:", schema
       for field_name, field_def of schema
         if field_def.join?
           foreign_collection = share.collection_for_name(field_def.join.collection)
-          foreign_schema = foreign_collection.simpleSchema?()?.schema()
+          foreign_schema = join.config.schemas_for_collection(foreign_collection)
+          #foreign_collection.simpleSchema?()?.schema()
+          if foreign_schema?
+            foreign_schema= join.config.schema_defs_for_schemas(foreign_schema)[0]
           unless foreign_schema
             console.error "could not find schema for collection #{field_def.join.collection}, referenced from #{col_def.name}.#{field_name}."
           else
+            
             merge_schema[col_def.name]?={}
             label_field = _.findKey foreign_schema, (def)-> def?.input_spec?.label
             merge_schema[col_def.name][field_name]=

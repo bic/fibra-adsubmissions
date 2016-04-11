@@ -2,6 +2,13 @@ _= lodash
 form_ui=
   console:console
 
+{checkNpmVersions}= require 'meteor/tmeasday:check-npm-versions' 
+checkNpmVersions 
+  'mongo-dot-notation':'1.0.5'
+
+dot = require('mongo-dot-notation');
+
+
 class FormUIError extends Error
   constructor:(@message,@original)->
     if Meteor.isClient
@@ -35,6 +42,11 @@ _.extend form_ui,
   inf:(args...)->
     form_ui.console.info new FormUIError(args...).toString()
   
+  flat_set_mod: (value)->
+    dot.flatten _.cloneDeepWith value, (val) ->
+      if _.isArray(val)
+        return _.zipObject(_.range(val.length), val)
+      return
   ###
     datapath compiles a schema path like `x.$.f`
     into a datapath like `["x",1,"f"]`
@@ -42,6 +54,28 @@ _.extend form_ui,
     @param reactive: dependencies are added to the views from which the path is taken _defaut: `false`_
     @returns the object data path in array form [field, index, fiels] ready to use with `_.get`
   ###
+  parent_form_instance:(view)->
+    ret= null
+    share.each_parent_template view, (inst)->
+      if inst.view.name.endsWith 'bs_form'
+        ret= inst
+        return false
+      return
+    if ret?
+      return ret
+    else
+      return
+  ###
+  returns the root form instance
+  ###
+  root_form_instance:(view)->
+    ret = form_ui.parent_form_instance (view)
+    unless ret?
+      return
+    console.log ret
+    while ret.reactiveForms.parent_form?
+      ret= ret.reactiveForms.parent_form
+    return ret
   data_path:(view, reactive)->
     view?=Blaze.getView() 
     schema_path= null
@@ -55,12 +89,12 @@ _.extend form_ui,
         #ignore non-template views
 
 
-        if inst.reactiveForms and inst.data?.field
+        if inst.reactiveForms and inst.reactiveForms.field
           # also ignore non reactiveForms templates
 
           if not schema_path?
-            schema_path= inst.data.field.split "."
-            default_path= inst.data.field.split "."
+            schema_path= inst.reactiveForms.field.split "."
+            default_path= inst.reactiveForms.field.split "."
             default_path_view= view
           if default_path.length > schema_path.length
             default_path.splice(schema_path.length, default_path.length)
@@ -84,8 +118,10 @@ _.extend form_ui,
               # this means we have taken all parts down to this field
               stop= true
             schema_path.splice schema_path.length-1, 1
+            default_path.splice default_path.length-1,1
             break if stop
-          default_path= inst.data.field.split "."
+          default_path= inst.reactiveForms.field.split "."
+
           if reactive
             default_path_view = view
           ###
@@ -100,7 +136,15 @@ _.extend form_ui,
             break
       view = view.originalParentView or view.parentView
     return data_path.reverse()
-
+  company_roles:share.company_roles= [ 
+    "Creative Agency/Full-service Agency",
+    "Digital Agency",
+    "Media Agency"
+    "PR Agency"
+    "BTL Agency"
+    "Branding Agency"
+    "Production Company"
+  ]
 
 
 

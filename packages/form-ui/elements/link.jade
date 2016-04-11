@@ -1,9 +1,6 @@
 template(name='bs_link')
   input.reactive-element(type="hidden")
-  // input value is set in trackr computation to also allow for triggering a changed event on the new value
   if dbg_id
     p #{link_id}
   +bs_form sub_form_context
-    
-    |#{debug_context}
     +UI.contentBlock .

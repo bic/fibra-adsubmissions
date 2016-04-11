@@ -23,7 +23,8 @@ remove_blackboxes = (json)->
     if schema= c.simpleSchema?() # might be a FS.Collection as well
       schema = schema.schema()
       if  _.isString(schema.name) and schema.name.length && schema.name != c.name
-          console.error "Schema name for collection #{c.name} differs from schema name#{ schema.name}"
+        
+        console.error "Schema name for collection #{c.name} differs from schema name#{ schema.name}"
       else
         for key, val of schema
           if val.blackbox
@@ -70,11 +71,12 @@ share.merge_schema = merge_schema = (arg1, arg2)->
     obj= arg2
   else
     obj= arg1
-  debugger
   for collection_name,schema_def of obj
     collection = share.collection_for_name(collection_name)
     orig_schema = collection?.simpleSchema()?.schema()
     for field_name,field_def of schema_def
+      if field_name== "section_ids.$"
+        debugger
       if key?
         field_def = 
           _.zipObject [key],[field_def]
@@ -90,10 +92,16 @@ share.replace_schema= (new_schema, collection)->
     new_schema= new SimpleSchema new_schema
   if _.isString collection
     collection= share.collection_for_name collection
-  Schemas_key = _.findKey Schemas , (s)->s==share.collection_for_name(collection)?.simpleSchema()
-  Schemas[Schemas_key] = new_schema
-  collection.attachSchema Schemas[Schemas_key], {replace:true}
+  Schemas_key = _.findKey Schemas , (s)->s== join.config.schemas_for_collection(collection)?[0]?.schema
+  if Schemas_key
+    Schemas[Schemas_key] = new_schema
+    collection.attachSchema Schemas[Schemas_key], {replace:true}
+  else
+
 share.on_json_loaded ->
+
+  unless join.config.collection_for_name('submission_files')
+    throw new Error "no submission_files collection found!"
   schema = Schemas.Submissions._schema
   SimpleSchema.extendOptions
     minWordCount:Match.Optional(Number)
@@ -127,10 +135,10 @@ share.on_json_loaded ->
       num =  text_word_counter  text
       return "not enough words"  if min? and num < min
       return   "too many words"  if max? and num > max
-
   glob= this
+    
   
-
+            
 
   merge_schema
     submissions:
@@ -150,13 +158,15 @@ share.on_json_loaded ->
       confidential_info:
         maxWordCount: 300
       credit_contacts:
-        minCount:3
+        minCount:1
         maxCount:10
-      section_ids:
+      sections:
         minCount:1
         maxCount:5
+  
+  
 
-  job_titles= [
+  share.job_titles= job_titles= [
     "Sr. Art Director",
     "Art Director",
     "Jr. Art Director",
@@ -201,15 +211,6 @@ share.on_json_loaded ->
     "Managing Director"
   
   ]
-  company_roles= [ 
-    "Creative Agency/Full-service Agency",
-    "Digital Agency",
-    "Media Agency"
-    "PR Agency"
-    "BTL Agency"
-    "Branding Agency"
-    "Production Company"
-  ]
   merge_schema "input_spec",
     sections:
       name:
@@ -220,14 +221,15 @@ share.on_json_loaded ->
     submissions:
       promoted_products_description:
         placeholder: "Enter here a short description of what you created"
-      submitter_id:
-        placeholder: "Legal Entity"
-      section_ids:
-        placeholder: "Select sections"
-      brand:
-        placeholder: "The promoted Brand"
-      context_description:
-        placeholder: "In what circumstantions did you become creative"
+      #submitter_id:
+      #  placeholder: "Legal Entity"
+      #section_ids:
+      #  placeholder: "Select sections"
+      
+      #brand:
+      #  placeholder: "The promoted Brand"
+      #context_description:
+      #  placeholder: "In what circumstantions did you become creative"
       campaign_summary:
         placeholder: "objectives, strategy, creative idea and implementation"
       target_audience:
@@ -254,6 +256,17 @@ share.on_json_loaded ->
           type:'horsey'
           suggestions: job_titles
           allow_custom: true   
+      "other_companies.$.role":
+        placeholder: "Function of the company within the project"
+        ###autocomplete:
+          type:"horsey"
+          suggestions: form_ui.company_roles
+          allow_custom: true
+        ###     
+      "files.$.is_case_file":
+        switch:
+          onText: "Case File"
+          offText: "Campaign File" 
 
     contacts:
       name:
@@ -276,6 +289,6 @@ share.on_json_loaded ->
         placeholder: "The main field of engagement"
         autocomplete:
           type:"horsey"
-          suggestions: company_roles
+          suggestions: form_ui.company_roles
           allow_custom: true
 

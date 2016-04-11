@@ -1,5 +1,9 @@
 template(name="homePrivateSubmissions")
   h1 Current Submissions
+  if has_trashed_items
+    .btn.btn-default.toggle-trashed
+      |#{trash_btn_label}
+    
   with submission_list  
     ul.list-group
       each .
@@ -12,9 +16,55 @@ template(name="homePrivateSubmissions")
             .glyphicon.glyphicon-plus
             | Add a Submission
       .clearfix
+  +new_submission
+template(name="new_submission")
+  a.btn.btn-lg.btn-primary.pull-right(href= "{{pathFor 'submissions.candidate_edit.basics' id='new'}}" )
+    .glyphicon.glyphicon-plus
+    | Add a submission
+  .clearfix
 template(name="submission_link")
     li.list-group-item
-      a(href= "{{pathFor edit_link data=edit_data}}")
-        |#{title}
-      if draft
-        .pull-right.label.label-default draft
+      .col-md-7
+        a(href= "{{pathFor edit_link data=edit_data}}" class=link_classes)
+          if trashed
+            s #{title}
+          else
+            |#{title}
+     
+        .btn.btn-default.do-show-preview.pull-right
+          .glyphicon.glyphicon-eye-open
+      .col-md-3
+        if review_requested
+          .label.label-info Review requested #{review_request_time}
+          unless retract_confirm
+            .btn.btn-default.btn-sm.do-confirm-unrequest-review
+              | Retract Request
+          else
+            table.table.table-condensed
+              tbody
+                tr.warning
+                  td(colspan="3") Retract review request?
+                tr
+                  td
+                    .btn.btn-default.btn-sm.do-unconfirm-unrequest-review
+                      | No
+                  td
+                  td
+                    .btn.btn-danger.btn-sm.do-unrequest-review
+                      | Yes
+            
+        else
+          .btn.btn-primary.do-request-review
+            | Request Review
+      .col-md-2
+        if trashed
+          .btn.btn-default.pull-right.do-untrash
+            | Reinstate
+        else
+          .btn.btn-default.pull-right.do-trash
+            .glyphicon.glyphicon-trash
+
+        if draft
+          .pull-right.label.label-default draft
+        .clearfix
+      .clearfix

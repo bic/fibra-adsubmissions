@@ -1,0 +1,69 @@
+
+template(name="_string_or_alert")
+  if .
+    | #{.}
+  else
+    .label.label-danger
+      .glyphicon.glyphicon-warning-sign
+      |Missing
+template(name="basics_display")
+  +bs_panel title="Basics"
+    with data
+      dl.dl-horizontal
+        dt {{field_name "title"}}
+        dd 
+          +_string_or_alert title
+        dt {{field_name "brand"}}
+        dd 
+          +_string_or_alert brand
+        dt {{field_name "client"}}
+        dd 
+          +_string_or_alert client
+        dt {{field_name "first_implementation"}}
+        dd 
+          +_string_or_alert first_implementation
+        dt {{field_name "promoted_products_description"}}
+        dd 
+          +_string_or_alert promoted_products_description
+      //table.table.table-compact
+        thead
+          th 
+            td 
+              |{{field_name "title"}}
+          th 
+            td 
+              |{{field_name "brand"}}
+          th 
+            td 
+              |{{field_name "client"}}
+        tbody
+          tr
+            td #{title}
+            td #{brand}
+          tr
+            td #{client}
+            td #{first_implementation_date}
+        +markdown
+          | #{promoted_services_description}
+
+      +object_or_alert name='submitter_contact' schema=schema data=.
+      h4 Subscribed Sections
+      ul.list-group
+        each sections
+          
+          li.list-group-item 
+            b.col-md-1
+              |#
+              |{{plus_one @index}}
+            .col-md-11
+              |#{name}
+            .clearfix
+        else
+          li.list-group-item 
+            .alert.alert-danger
+              .glyphicon.glyphicon-warning-sign
+              |No Category/Section selected!
+
+      +object_or_alert name='client_contact' schema=schema data=.
+
+

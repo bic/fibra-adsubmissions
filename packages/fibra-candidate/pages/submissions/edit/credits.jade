@@ -14,15 +14,17 @@ template(name="horsey_test")
     form.form
       +bs_form action=action schema=schemas.Submissions schema_selector=schema_selector
         +bs_autocomplete
-          +bs_input field="title" 
-          +bs_input field="submitter_id"
+          +bs_input same_ctx field="title" 
+          +bs_input same_ctx field="submitter_id"
+          
 template(name="credits")
   h2 Credits
   .well Add people, agencies and team members alike, who you want to give credit for their involvement in this work
-  +bs_form
-    +bs_autocomplete
-      +people_role_list same_ctx field='credit_contacts'
-    +submit_continue_btn
+  +debug_form_wrapper
+    +bs_form
+      +bs_autocomplete
+        +people_role_list same_ctx field='credit_contacts'
+      +submit_continue_btn
 
 template(name="submissionsCandidateEditCredits")
   +credits action=save_as_draft_action schema_selector=non_draft_selector id=params.id collection='submissions'

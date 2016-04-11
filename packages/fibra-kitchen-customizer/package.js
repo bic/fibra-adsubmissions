@@ -15,13 +15,19 @@ Package.onUse(function(api) {
     'coffeescript',
     'stevezhu:lodash@4.6.1',
     'pba:join',
-    'check'
+    'check',
+    'vsivsi:file-collection@1.3.2',
+    'aldeed:simple-schema@1.5.3',
     ]
     , 
     ['client','server']);
+  
   api.addFiles([
+    'join-config.coffee',
     'bugs.coffee',
-    'route_subscriptions.coffee'
+    'route_subscriptions.coffee',
+    
+    //'submission_files2.coffee'
     ], ['client','server']);
   api.addFiles(['fixtures.coffee'], 'server');
 });

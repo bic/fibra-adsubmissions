@@ -1,0 +1,17 @@
+template(name="submissionsCandidateEditBasics")
+   h2 Base information
+   with qf_env id="submissions_basics" collection='submissions'  
+    +quickForm same_ctx template=template fields=pick_fields.basics buttonContent=false
+    +ss_preview_btn
+    +ss_submit_btn
+template(name="submissionsCandidateEditBasics_quick")
+   h2 Base information
+   with qf_env id="submissions_basics" collection='submissions'  
+    +quickForm same_ctx template=template fields=pick_fields.basics buttonContent=false
+    +ss_submit_btn
+
+template(name="section_pick_explain")
+  |(Each submission can be made for a maximum of 5 sections, as described in the Competition sections - 
+  a(href="http://premiilefibra.ro/categorii-si-sectiuni", target='_blank')
+    |http://premiilefibra.ro/categorii-si-sectiuni
+  |)

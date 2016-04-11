@@ -1,0 +1,18 @@
+template(name="submissionsCandidateEditProduction")
+  h2 Production Company
+  with qf_env id="production_form" collection='submissions'  
+    +quickForm same_ctx template=template  fields=pick_fields.production  buttonContent=false
+    +ss_preview_btn
+    +ss_submit_btn
+template(name="submissionsCandidateEditMedia")
+  h2 Media Company
+  with qf_env id="submissions_media" collection='submissions'  
+    +quickForm same_ctx template=template  fields=pick_fields.media  buttonContent=false
+    +ss_preview_btn
+    +ss_submit_btn
+template(name="submissionsCandidateEditOtherContributors")
+  h1 More Companies
+  with qf_env id="submissions_contributors" collection='submissions'  
+    +quickForm same_ctx template=template  fields=pick_fields.more_contributors  buttonContent=false
+    +ss_preview_btn
+    +ss_submit_btn

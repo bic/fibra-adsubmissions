@@ -1,0 +1,7 @@
+template(name="SubmissionsCandidateEditFilesUpload")
+  h2 Files Upload
+  with qf_env id="submissions_credits" collection='submissions'  
+    +quickForm same_ctx template=template fields='files' buttonContent=false
+  +ss_preview_btn
+  +ss_submit_btn 
+  //target="/submissions/candidate_edit/all_submissions" 

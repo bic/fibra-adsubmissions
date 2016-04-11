@@ -90,6 +90,9 @@ _.extend share,
     #found no template
     return 
   each_parent_view: (elm,fn)->
+    if _.isFunction elm
+      fn= elm
+      elm= undefined
     view = Blaze.getView elm
     while view      
       if  false == fn(view)
@@ -148,7 +151,7 @@ _.extend share,
 
 do(tmpl=Template.bs_input)->
   helpers= 
-    classes:(arg)->
+    classes:(inst,arg)->
       arg= arg.hash
       if arg.changed
         if arg.valid
@@ -158,7 +161,7 @@ do(tmpl=Template.bs_input)->
       return
     
 
-    form_control_attributes:->
+    form_control_attributes:(inst)->
       #debugger
       form= Template.instance().reactiveForm
       schema = get_helper('schema')?()
@@ -195,19 +198,25 @@ do(tmpl=Template.bs_input)->
             ret.placeholder += "(#{wordspec.join(", ")}))"
           else
             ret.placeholder = wordspec.join(", ")
-      #debugger
+      debugger
       if value= share.eval_helper 'value'
         ret.value= value
+      else if @data
+        data_path = form_ui.data_path inst.view
+        if value = _.get @data , data_path
+          if value?
+            ret.value= value 
       unless _.keys(ret).length
         return
 
       return ret
-    label_classes:->
+    label_classes:(inst)->
       #option
       if @crunch_label_with_placeholder
         return 'sr-only'
   _.extend helpers, share.general_form_helpers
-  tmpl.helpers helpers
+  tmpl.instance_helpers helpers
+  share.install_value_dependency_handler tmpl
 do(tmpl=Template.bs_form)->
   #dbg_id=0
   ReactiveForms.createFormBlock
@@ -227,7 +236,7 @@ do(tmpl=Template.bs_form)->
       if @data.schema_selector
         @schema_selector= @data.schema_selector  
       try
-        unless (schema= @data?.schema or collection?.simpleSchema?(@data.schema_selector))
+        unless (schema= join.config.schema_for_doc collection, @data.schema_selector)
           console.error "bs_form: collection = #{collection}. Did not find any schema"
       catch e
         form_ui.except( "You must supply a schema with schema_selector=<sel_field> when using Collection2 with multiple schemas and editing new objects!", e)
@@ -243,8 +252,10 @@ do(tmpl=Template.bs_form)->
         
         # this happend if eiher no id has been supplied or a non-reactiveVar id was supplied
        
-        parent_with= Blaze.getView ('with')
-        @autorun (c)=> 
+        
+
+
+        @autorun (c)=>
           ###
             TODO: might want to push this to rendered and only invalidate on a cursor with fields within the view.
             This, however must be supported by lists which might be empty (no reactiveElements) but still
@@ -258,12 +269,18 @@ do(tmpl=Template.bs_form)->
           ###
             TODO: what happens if non-first-level fields change in the query? 
           ###
-          @data.data = collection.findOne(id= @id.get())
-          if id and id != "new" and not @data.data
+          parent_with= Blaze.getView('with')
+          data = @data=parent_with.dataVar.curValue
+          id= @id.get()
+          debugger
+          if id?
+            data.data = collection.findOne(id)
+          if id and id != "new" and not data.data
             #debugger
             form_ui.err "could not find any object with id #{id} in collection: #{collection._name}", collection
           unless c.firstRun
             #On the first run the templates:forms initializer has not run yet, so no reason to invalidate parent 'with'
+            debugger
             parent_with.dataVar.dep.changed()
 
       if schema && not @data.schema
@@ -301,24 +318,44 @@ do(tmpl=Template.bs_form)->
           else
             doc= this
           id = inst.id?.get()
+          id ?= doc._id
           if id? and id != "new"
             if callbacks?
               #only define callback if no user action was supplied
-              cb=(error,id)->
+              cb=(error,affected)->
                 #debugger
                 if error?
                   #console.error "DONECB: error updating(ID:#{inst.reactiveForms.ID}):", error, inst
                   callbacks.failed(error)
 
                 else
+                  ### 
+                    UPDATE code
+                  
+                  inst.on_update.handler.forEach (after_update)->
+                    after_update collection, id,mod, inst.data.schema_selector
+                  ###
                   #console.log "DONECB: success updating (affected #{id})(ID:#{inst.reactiveForms.ID}):", inst
                   callbacks.success("Entry in #{inst.data?.collection} updated sucessfully!")
             if inst.data.no_db_operations
-              #console.log "update suppressed on form (ID:#{inst.reactiveForms.ID}):", inst, "with context:", this
+              console.log "update suppressed on form (ID:#{inst.reactiveForms.ID}):", inst, "with context:", this
               cb undefined,1 
             else
-              #console.log "update called on form (ID:#{inst.reactiveForms.ID}):", inst, "with context:", this
-              collection.update id, {$set: doc}, cb
+              console.log "update called on form (ID:#{inst.reactiveForms.ID}):", inst, "with context:", this
+              debugger
+              ###
+              flat set mod 
+                - only updates keys in the set mod, as opposed to 
+                - sets the contents of arrays as opposed to each element replacing the whole elemebt
+
+              ###
+              #mod = form_ui.flat_set_mod _.omit(doc,'_id')
+              mod=
+                $set: _.omit(doc,'_id')
+
+              collection.update doc._id, mod, cb
+
+
           else
             if callbacks?
               #only define callback if argument is present was supplied
@@ -334,11 +371,12 @@ do(tmpl=Template.bs_form)->
                   callbacks.success("New #{inst.data?.collection} entry added sucessfully!(ID:#{inst.reactiveForms.ID})")
             
             if inst.data.no_db_operations
-              #console.log "insert suppressed on form (ID:#{inst.reactiveForms.ID}):", inst, "with context:", this
+              console.log "insert suppressed on form (ID:#{inst.reactiveForms.ID}):", inst, "with context:", this
               cb(undefined,1);
             else
+              debugger
               inst.id.set collection.insert doc , cb
-              #console.log "insert (insert_id: #{inst.id.curValue}) called on form (ID:#{inst.reactiveForms.ID}):", inst, "with context:", this
+              console.log "insert (insert_id: #{inst.id.curValue}) called on form (ID:#{inst.reactiveForms.ID}):", inst, "with context:", this
         action= _.wrap action  , ( old_action, elms, callbacks, changed)->
           #console.log "action wrapper called call_ctx: #{callback_id.get()} my id : ID:#{inst.reactiveForms.ID} "
           if glob.dbg_form == inst.reactiveForms.ID
@@ -352,7 +390,7 @@ do(tmpl=Template.bs_form)->
             
             finished= ()=>
               cb_count--
-              #console.log("finished called, countdown: #{cb_count}, form: #{inst.reactiveForms.ID}", inst)
+              console.log("finished called, countdown: #{cb_count}, form: #{inst.reactiveForms.ID}", inst)
               #debugger
               if cb_count == 0
                 if success
@@ -390,6 +428,7 @@ do(tmpl=Template.bs_form)->
                 # afterflush to let invalidated ids run their dependencies
                 #debugger
                 console.log "(failed) waiting for changes to propagate on form (ID:#{inst.reactiveForms.ID})[cb_id:#{callback_id.get()} ]:", inst, "with context:", this
+                debugger
                 _ctx= callback_id.get()
                 Tracker.afterFlush  ->
                   callback_id.withValue _ctx , finished
@@ -426,9 +465,23 @@ do(tmpl=Template.bs_form)->
   delete tmpl.created
 
   tmpl.onCreated ->
+    # this is needed to pull deleted array elements
+    share.install_callback_provider 'update', this
+  tmpl.onCreated ->
     # set my template instance and link to parent if supplied
     @reactiveForms.templateInstance = this
     
+    if @id?
+      @autorun =>
+        ## This sets the new keyword on the id after the fist change
+        ## it helps propagate if any link points to this form
+        id = @id.get()
+        unless id?
+          if @reactiveForms.changed.get()
+            debugger
+            @id.set "new"
+          else
+            debugger
 
     ###
     install the form callback handlers
@@ -436,6 +489,7 @@ do(tmpl=Template.bs_form)->
     for name in "before_action,success,failure".split ","
       share.install_callback_provider  name, this
     
+
 
 
     @autorun (c)=>
@@ -466,6 +520,7 @@ do(tmpl=Template.bs_form)->
     form_context:->
       _.extend {},this,
         context: share.eval_helper 'context'
+        data:Template.currentData().data
     form_element_id:->
       "form_#{@reactiveForms.ID}"
     form_dbg: ->
@@ -599,20 +654,21 @@ ReactiveForms.createElement
 ReactiveForms.createElement
   template: 'bs_input'
   validationEvent: 'keyup'
-  reset:  (el)->
-    $(el).val('');
+  #reset:  (el)->
+  #  $(el).val('');
 ReactiveForms.createElement
   template: 'bs_woofmark'
-
-ReactiveForms.createElement
-  template: 'woofmark_textarea'
   validationEvent: 'keyup'
   validationValue:(element,clean, template)->
     editor = woofmark.find(element);
     unless editor?
       return 
     value = editor.value()
+    debugger
     return value
+#ReactiveForms.createElement
+#  template: 'woofmark_textarea'
+  
  
     
       
