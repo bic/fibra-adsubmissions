@@ -18,6 +18,7 @@ if(Meteor.isServer)
     isReady: function(){
       //Reactive ready method
       dep.depend();
+      return _.isObject( app_json.application);
     },
     get: function() {
       //Reactive get method
