@@ -13,9 +13,9 @@ Package.describe({
 Package.onUse(function(api) {
   api.versionsFrom('1.2.1');
   api.use(['ecmascript',  'templating','coffeescript', 'less','underscore']);
-  api.use(['aldeed:template-extension@4.0.0','pba:woofmark', 'reactive-var'], 'client');
-  api.addFiles(['woofmark-textarea.html','woofmark-textarea.coffee' ], 'client');
-  api.use(['pba:megamark', 'pba:domador','pba:remove-markdown'] , 'client', {weak:true});
+  api.use(['aldeed:template-extension@4.0.0','pba:woofmark', 'reactive-var','mquandalle:jade@0.4.9'], 'client');
+  api.addFiles(['woofmark-textarea.html','woofmark-textarea.coffee', 'autoform.jade', 'autoform.coffee' ], 'client');
+  api.use(['pba:megamark', 'pba:domador','pba:remove-markdown', 'aldeed:autoform@5.8.1'] , 'client', {weak:true});
   api.imply('pba:woofmark', 'client');
 });
 

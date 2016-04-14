@@ -1,6 +1,8 @@
 
 
 
+
+
 Template.woofmark_textarea.default_options= default_options =  woofmark.default_options = 
   type : "text"
   placeholder: "Start typing ..."
@@ -59,7 +61,7 @@ if Package['pba:remove-markdown']
   default_options.md2txt= Package['pba:remove-markdown'].removeMd
   default_options.display_word_count = true
   default_options.count_input = 'text'
-woofmark_options = [
+woofmark_options = share.woofmark_options= [
     "fencing",
     "markdown",
     "html",
@@ -73,7 +75,7 @@ woofmark_options = [
     "parseMarkdown",
     "parseHTML"
   ]
-template_options = [
+template_options = share.template_options= [
     "editor_only_with_focus",
     "word_count",
     "md2txt",
@@ -82,10 +84,11 @@ template_options = [
     "value",
     "sync_text_area",
     "display_word_count",
-    "count_input"
+    "count_input",
+    'word_count_display_template'
 
   ]
-pick_woofmark_options= (config_object)->
+pick_woofmark_options=  share.pick_woofmark_options= (config_object)->
   ret = _.defaults {},  config_object, default_options 
   ret = _.pick ret, woofmark_options
   if config_object.render
@@ -94,13 +97,24 @@ pick_woofmark_options= (config_object)->
     ret.render = default_options.render
   return ret
 
-pick_template_options= (config_object)->
+pick_template_options= share.pick_template_options =  (config_object)->
   ret=_.defaults {} , config_object, default_options  
   _.pick ret, template_options
 do(tmpl= Template.woofmark_textarea) ->
   tmpl.helpers
     attributes:->
-      _.pick _.defaults({},Template.currentData() , default_options ), 'text,placeholder,id,class'.split(',')
+      debugger
+      data = Template.currentData()
+      keys = 'text,placeholder,id,class,data'.split(',')
+      for key of this
+        if key.startsWith 'data-'
+          keys.push key
+      ret= _.pick _.defaults({}, data, default_options ), keys
+
+      
+      if data.atts
+        _.extend ret, data
+      return ret
       
     value:->
       inst= Template.instance()
@@ -117,9 +131,22 @@ do(tmpl= Template.woofmark_textarea) ->
     word_count_var: ->
       return  Template.instance().wordcounter
     display_word_count: -> 
+      debugger
       # only display if both wordcounting and it's display_word_count are truish
       @display_word_count and Template.instance().wordcounter?
-  
+    word_count_display_template: ->
+      f= ->
+        debugger
+        if @word_count_display_template
+          if _.isString(@word_count_display_template)
+            return Template[@word_count_display_template]
+          else
+            return @word_count_display_template
+        else
+          Template.word_count_display
+
+      # using an object argument actually creates a with context   
+      return f.call(Template.parentData())
   create_editor = (data)->
     options= pick_woofmark_options data
     editor = woofmark(@find('textarea'), options)

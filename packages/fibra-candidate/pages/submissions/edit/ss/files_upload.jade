@@ -1,7 +1,34 @@
 template(name="SubmissionsCandidateEditFilesUpload")
   h2 Files Upload
-  with qf_env id="submissions_credits" collection='submissions'  
-    +quickForm same_ctx template=template fields='files' buttonContent=false
+  with qf_env id="submissions_files_upload" collection='submissions'  
+    +quickForm same_ctx template=template fields=pick_fields.file_upload buttonContent=false
+    //+autoForm same_ctx template=template fields=pick_fields.file_upload buttonContent=false
+      +afQuickField name= 'files.$.name'
+      +afQuickField name= 'files.$.file_id'
+      +afQuickField name= 'files.$.is_case_file'
+      +afQuickField name= 'files.$.translation'
   +ss_preview_btn
   +ss_submit_btn 
   //target="/submissions/candidate_edit/all_submissions" 
+template(name="file-upload-explain")
+  if is_case_file
+    h4 CASE FILE DETAILS
+    ul.file-upload-explain-list
+      li All Case presentation videos mustnot exceed 180 seconds in length. 
+      li All video Files must be in
+        ul
+          li .mp4 format 
+          li minimum HD resolution 720p
+      li All boards/image files must be in 
+        ul 
+          li .jpeg format 300 dpi format 
+          li A3 format
+  else
+    h4 CREATIVE FILE DETAILS
+    ul.file-upload-explain-list
+      li All image files must be in .jpeg 300 dpi format
+      li All audio files must be in .mp3 / 48kHz format 
+      li All executions submitted must fit within 180 seconds. In case an execution exceeds this limit, it must be accompanied by an extract of 180 seconds or less in .mp4, HD format – minimum 720p
+      li All types of online content must be referred to through an active link to the web page / application / web execution [ in the field below the File ]
+      li All CREATIVE files must be in Romanian [ English Translation in the field below the File ]
+    

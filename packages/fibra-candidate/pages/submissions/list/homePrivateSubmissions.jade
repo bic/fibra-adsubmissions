@@ -40,15 +40,15 @@ template(name="new_submission")
   .clearfix
 template(name="submission_link")
     li.list-group-item
-      .col-md-7
+      .col-md-5
         a(href= "{{pathFor edit_link data=edit_data}}" class=link_classes)
           if trashed
             s #{title}
           else
             |#{title}
-     
+      .col-md-2
         .btn.btn-default.do-show-preview.pull-right
-          .glyphicon.glyphicon-eye-open
+          |Preview
       .col-md-3
         if review_requested
           .label.label-info Submitted for review #{review_request_time}

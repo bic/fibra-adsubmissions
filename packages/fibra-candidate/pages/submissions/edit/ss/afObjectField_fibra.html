@@ -6,13 +6,20 @@
     </div>
     {{/with}}
     <div class="panel-body {{bodyClass}}">
+      {{#if explain_before}}
+        {{#if explain_template}}  
+          {{> explain_template }}
+        {{/if}}
+      {{/if}}
       {{#if afFieldIsInvalid name=this.name}}
       <span class="help-block">{{{afFieldMessage name=this.name}}}</span>
       {{/if}}
       {{> afQuickFields quickFieldsAtts}}
     </div>
-    {{#if explain_template}}  
-      {{> explain_template }}
+    {{#if explain_after}}
+      {{#if explain_template}}  
+        {{> explain_template }}
+      {{/if}}
     {{/if}}
   </div>
 </template>

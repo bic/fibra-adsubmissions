@@ -143,7 +143,7 @@ share.on_json_loaded ->
   merge_schema
     submissions:
       promoted_products_description:
-        minWordCount: 1
+        minWordCount: 0
         maxWordCount: 30
       context_description:
         maxWordCount: 300
@@ -152,13 +152,15 @@ share.on_json_loaded ->
         minWordCount: 1
       target_audience:
         maxWordCount: 150
-        minWordCount: 1
+        minWordCount: 0
+      media_appearance:
+        maxWordCount:300
       results_summary:
         maxWordCount: 300
       confidential_info:
         maxWordCount: 300
       credit_contacts:
-        minCount:1
+        minCount:0
         maxCount:10
       sections:
         minCount:1

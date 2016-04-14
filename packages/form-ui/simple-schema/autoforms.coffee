@@ -1,5 +1,5 @@
 _= lodash
-person_handler= (value_cmp)->
+hide_handler= person_handler= (value_cmp)->
   (value)->
     $(this.firstNode).siblings().filter('.form-control').parent('.form-group').toggle(value == value_cmp)
     #$(@find('form-control')).toggle( value == value_cmp)
@@ -211,14 +211,30 @@ share.on_json_loaded ->
 
 
   _.extend autoform_defs.submissions , 
-
-      "files.$.translation":
+      "files.$":
         autoform:
-          type: "textarea"
+          afObjectField:
+            headingClass: "hidden"
+          explain_before:true
+          explain_template: "file-upload-explain"
+      "files.$.translation":
+        controlled_by: 
+          is_case_file: (val)->
+              fg= $(this.firstNode).parents('.form-group')
+              fg.toggle(val==false)
+
+        autoform:
+          type: "woofmark"
+          #word_count:true
+          #display_word_count:true
+          #word_count_display_template:"word_count_fibra"
+          placeholder:""
           #placeholder: "Translate any romanian content relevant to the jury contained in the file"
       "files.$.is_case_file":
         label:null
+        control_field:"is_case_file"
         autoform:
+          
           type:"boolean-radios"
           trueLabel:'Case'
           falseLabel:'Creative'
@@ -254,6 +270,51 @@ share.on_json_loaded ->
       'other_companies.$.role':
         autoform:
           template:'bootstrap3'
+      #promoted_products_description:
+      #  autoform:
+      #    type:'woofmark'
+      context_description:
+        autoform:
+          type:'woofmark'
+          placeholder:""
+          word_count:true
+          display_word_count:true
+          word_count_display_template:"word_count_fibra"
+      campaign_summary:
+        autoform:
+          type:'woofmark'
+          placeholder:""
+          word_count:true
+          display_word_count:true
+          word_count_display_template:"word_count_fibra"
+      target_audience:
+        autoform:
+          type:'woofmark'
+          placeholder:""
+          word_count:true
+          display_word_count:true
+          word_count_display_template:"word_count_fibra"
+      media_appearance:
+        autoform:
+          type:'woofmark'
+          placeholder:""
+          word_count:true
+          display_word_count:true
+          word_count_display_template:"word_count_fibra"
+      results_summary:
+        autoform:
+          type:'woofmark'
+          placeholder:""
+          word_count:true
+          display_word_count:true
+          word_count_display_template:"word_count_fibra"
+      confidential_info:
+        autoform:
+          type:'woofmark'
+          placeholder:""
+          word_count:true
+          display_word_count:true
+          word_count_display_template:"word_count_fibra"
 
   #for key , val of autoform_defs
   #  _.set val, ['autoform', 'afFormGroup', 'class'] , 'col-sm-6'

@@ -2,3 +2,15 @@ template(name="_ss_base")
 
 template(name="afTextExplain")
   |#{explain}
+template(name="word_count_fibra")
+  if do_word_count
+    b
+      |Words: #{word_count}/#{max_word_count}
+      | &nbsp;
+  if is_optional
+    span.text-info
+      | This Field is optional
+  else
+    span.text-warning
+      | This Field is MANDATORY
+

@@ -4,11 +4,15 @@ do(tmpl=Template.afObjectField_fibra)->
     debug: (inst)->
       A= AutoForm
       debugger
+    explain_before:->
+      @explain_before
+    explain_after:->
+      not @explain_before
     explain_template: (inst)->
       debugger
       has_explain = false
-      if @explain_template and Template[explain_template]
-        tmpl= Template[explain_template]
+      if @explain_template and Template[@explain_template]
+        tmpl= Template[@explain_template]
         has_explain = true
       else
         tmpl = Template.afTextExplain

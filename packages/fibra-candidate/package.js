@@ -68,7 +68,7 @@ Package.onUse(function(api) {
     'ss/credits',
     'ss/contributing_companies',
     'ss/side_btns',
-    'presentation',
+    'ss/presentation',
     'ss/files_upload',
     'all_submissions',
     'ss/preview',
