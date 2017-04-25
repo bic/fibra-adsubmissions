@@ -1,0 +1,39 @@
+
+@section_width: 40%;
+@section_width_fixed: 352px;
+@criteria_width: ((100% - @section_width)/6);
+
+.grading{
+  thead tr, tbody tr {
+    th, td {
+      & > * {
+        vertical-align: middle;
+      }
+      &.overall{
+        width:@criteria_width * 3;
+      }
+      &.context, &.execution, &.originality{
+        width: @criteria_width;
+      };
+      &.section {
+        width: @section_width_fixed;
+      };
+
+      
+    };
+    th.overall.section{
+      width: @section_width_fixed;
+      max-width: @section_width_fixed;
+    }
+  };
+
+  .form-control, .form-control-static{
+    width:4em !important;
+
+  };
+  .form-control-static {
+    text-overflow:ellipsis;
+    overflow: hidden;
+  }
+
+}

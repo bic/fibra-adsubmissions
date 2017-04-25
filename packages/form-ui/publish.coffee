@@ -25,6 +25,21 @@ Meteor.startup ->
     find:()->
       submission_col.find {},
         owner_account: @userId
-
+  Meteor.publishComposite 'admin_submissions', (id)->
+    console.log "Admin subscribed submission #{id}"
+    userId=@userId
+    find:()->
+      if Meteor.users.isAdmin(userId) and id?
+        return submission_col.find id
+    children:[
+      find:(submission_doc)->
+        if submission_doc?.files?.length
+          ret = SubmissionFiles.find
+            _id:
+              $in: submission_doc.files.map (f)->f.file_id
+          return ret
+        else
+          return
+    ]
     
   

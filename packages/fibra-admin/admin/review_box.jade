@@ -1,0 +1,65 @@
+template(name="review_box")
+  panel.panel-primary
+    .panel-heading
+      h5 Review 
+      with review_request_label
+        .label.label-default Review Requested #{human_date}
+    with reviews
+      .ul.list-group
+        each .
+          .li.list-group-item.list-striped
+            .col-sm-4
+              table.table.table-striped.table-bordered
+                tbody
+                  with reviewer
+                    tr
+                      th From
+                      td #{profile.name}
+                  if review_request_from
+                    tr
+                      th Initial Review Request
+                      td {{human_date review_request_from}}
+                  tr
+                    th Review Time
+                    td {{human_date created_on}}
+                  
+               
+            .col-sm-8
+              .alert.alert-info
+                +markdown 
+                  {{text}}
+              if isAdmin 
+                table.table.table-condensed.table-striped.table-bordered
+                  thead
+                    tr 
+                      th(colspan="2") 
+                        | Notifications
+                        span.btn.btn-sm.btn-default.do-send-review-notification(class=send_email_btn_class)
+                          
+                          | #{send_email_btn_label}
+                          if notification_emails
+                            .label.label-info
+                              |{{notification_emails.length}} sent
+                    tr
+                      th Send Time
+                      th Recipients
+                  tbody
+                    each sorted_notification_emails
+                      tr
+                        td
+                          if sent
+                            |{{human_date sent}}
+                          else
+                            |Send Error: {{human_date error.time}}: #{error.msg}  
+                        td
+                          each to
+                            if @index
+                              | , 
+                            a(href="mailto:{{this}}") {{this}}
+
+            .clearfix
+    if show_message_composer 
+      .panel-body
+        +woofmark_textarea clear_ctx=true
+        .btn.btn-primary.pull-right.do-submit-review(class=action_button_class) #{action_button_text}
+        .clearfix

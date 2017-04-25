@@ -161,7 +161,6 @@ share.on_json_loaded ->
         maxWordCount: 300
       credit_contacts:
         minCount:0
-        maxCount:10
       sections:
         minCount:1
         maxCount:5

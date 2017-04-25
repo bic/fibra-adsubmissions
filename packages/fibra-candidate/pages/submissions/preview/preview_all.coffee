@@ -11,6 +11,9 @@ do(tmpl= Template.preview_all)->
       ret=
         data:data
       return ret
+    is_admin:(inst)->
+      Meteor.users.isAdmin(Meteor.userId())
+    
   tmpl.instance_helpers helpers
   tmpl.inheritsHelpersFrom '_display_base'
   tmpl.inheritsHooksFrom '_display_base'

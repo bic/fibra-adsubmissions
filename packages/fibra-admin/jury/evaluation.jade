@@ -1,0 +1,48 @@
+template(name= 'evaluate_submission')
+  with compile_ctx
+    +review_display 
+    //+credits_display 
+    //+production_display 
+    //+media_display 
+    //+other_companies_display 
+    +presentation_display 
+    +files_display
+    +grading_widget 
+
+template(name="review_display")
+  +bs_panel title="Basics"
+    with data
+      dl.dl-horizontal
+        dt {{field_name "title"}}
+        dd 
+          +_string_or_alert title
+        dt {{field_name "brand"}}
+        dd 
+          +_string_or_alert brand
+        dt {{field_name "client"}}
+        dd 
+          +_string_or_alert client
+        dt {{field_name "first_implementation"}}
+        dd 
+          +_string_or_alert first_implementation
+        dt {{field_name "promoted_products_description"}}
+        dd 
+          +_string_or_alert promoted_products_description
+      with sections
+        h4 Subscribed Sections
+        ul.list-group
+          each .      
+            li.list-group-item 
+              b.col-md-1
+                |#
+                |{{plus_one @index}}
+              .col-md-11
+                |#{name}
+              .clearfix
+      else
+        li.list-group-item 
+          .alert.alert-danger
+            .glyphicon.glyphicon-warning-sign
+            |No Category/Section selected!
+      if client_contact
+        +object name='client_contact' schema=schema data=.

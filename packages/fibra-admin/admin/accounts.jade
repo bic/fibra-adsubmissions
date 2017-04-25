@@ -1,0 +1,51 @@
+template(name="admin_accounts")
+  unless ready
+    h1 loading ...
+  else
+    with accounts
+      ul.list-group
+        each .
+          li.list-group-item.account-entry
+            .col-md-4
+              |#{profile.email}
+              each roles
+                small
+                  .label.label-primary #{.}
+              with profile.name
+                <br>
+                |#{.}
+              +impersonate_btn  go_url=impersonate_path user_id=_id
+            if is_admin
+              .btn.btn-default.btn-xs.pull-right.do-remove-admin Remove Admin status
+            else
+              .col-md-4
+                with profile.company
+                  dl.dl-horizontal
+                    dt CIF:
+                    dd #{cif}
+                      .btn.btn-xs.btn-default.do-toggle-company-details ...
+                  if show_company_details
+                    +invoice_data_dl
+                else
+                  | N/A
+              .col-md-4
+                with account_stats
+                  .row
+                    span.label.label-default #{sections_count} sections
+                    span.label.label-default #{submissions_count} submissions
+                    span.label.label-default #{price} EUR
+                    .btn.btn-xs.btn-default.do-toggle-submission-details ...
+                    .btn.btn-xs.btn-danger.do-make-admin.pull-right Make Admin
+                  if show_submission_details
+                    +submission_details
+
+             .clearfix
+template(name="submission_details")
+  each submissions
+    ul.list-unstyled
+      li 
+        a(href="{{pathFor 'submissions.candidate_edit.basics' id=_id}}") #{submission_name}
+      with sections
+        ul
+          each .
+            li #{name}

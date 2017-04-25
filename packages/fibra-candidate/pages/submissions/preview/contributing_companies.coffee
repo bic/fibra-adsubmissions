@@ -43,7 +43,8 @@ do(tmpl=Template.media_display)->
 do(tmpl=Template.other_companies_display)->
   helpers=
     company_ctx:(inst)->
-      @data.other_companies.map (comp, idx)=>
+      debugger
+      ret = @data.other_companies?.map (comp, idx)=>
         ret={}
         if comp.role
           ret.title = comp.role
@@ -52,6 +53,10 @@ do(tmpl=Template.other_companies_display)->
         ret.name = "other_companies.#{idx}"
         ret.data=@data
         return ret
+      if ret? and ret.length
+        return ret
+      else
+        return
 
   tmpl.instance_helpers helpers
   tmpl.inheritsHelpersFrom '_display_base'

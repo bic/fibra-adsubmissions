@@ -1,0 +1,82 @@
+template(name='submissions_list')
+  h1 Submission List
+  .col-md-12
+    with filter=filter
+      
+      .btn-group
+        +review_filter
+        +numeric_sort_option query_options=query_options name='last_review'
+      .btn-group
+        +request_for_review_filter
+        +numeric_sort_option query_options=query_options name='review_request'
+      .btn-group
+        +brand_filter
+        +alpha_sort_option query_options=query_options name='brand'
+      .btn-group
+        +title_filter
+        +alpha_sort_option query_options=query_options name='title'
+      .btn-group
+        +contact_filter
+        +alpha_sort_option query_options=query_options name='submitter_contact.name'
+      +is_trashed
+        
+      
+      with same_ctx fields=fields_ref
+        .input-group
+          .input-group-btn
+            +field_selector
+          +tags_filter
+  if debug
+    .col-md-6
+      pre #{filter_json}
+    .col-md-6
+      pre #{query_options_json}
+  .col-md-12
+    with submissions 
+      h3 
+        .label.label-default #{count} entries
+      each .
+        +submission_widget data=. filter=compiled_filter fields=widget_force_fields
+template(name="submission_widget")
+  .panel.panel-default.submission-widget
+    .panel-heading
+      with data
+        h4.col-md-9 
+          if trashed
+            strike
+              |#{submission_name}
+            .label.label-default Trashed
+          else
+           |#{submission_name}
+        .col-md-3
+          .btn.btn-default.do-preview Preview
+          //.btn.btn-default.do-edit Edit
+        
+      with user
+        .col-md-6
+          strong Account:
+            a(href="mailto:{{profile.email}}" target="_blank")
+              |#{profile.name} &lt;#{profile.email}&gt;
+            +impersonate_btn go_url=impersonate_path user_id=_id
+      .col-md-6
+        each labels
+          .label(class=label_class) #{label}
+      .clearfix    
+
+    with display_fields
+      .panel-body
+        dl
+          each . 
+            dt #{field_name}
+            dd 
+              each field_value_bits
+                if value
+                  if highlight
+                    mark #{value}
+                  else
+                    |#{value}
+                else
+                  .label.label-default Not Set
+              if show_more_btn
+                .btn.btn-xs.btn-default
+                  |More...

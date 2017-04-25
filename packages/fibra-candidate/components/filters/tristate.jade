@@ -1,0 +1,53 @@
+template(name='submission_filter')
+  +reviewed
+template(name="tristate_btn")
+  | None
+template(name= "review_filter")
+  span.btn.btn-default.do-toggle(data-toggle="tooltip" data-placement="top" title="submissions with requested reviews or submissions which never have been reviewed") 
+    .glyphicon(class=glyphicon_boolean)
+    |Review date
+template(name= "request_for_review_filter")
+  .btn.btn-default.do-toggle(data-toggle="tooltip" data-placement="top" title="submissions with more recent review requests than the last review") 
+    .glyphicon(class=glyphicon_boolean)
+    |Review Requested
+template(name= "contact_filter")
+  .btn.btn-default.do-toggle
+    .glyphicon(class=glyphicon_boolean)
+    if is_true
+      |Has
+    else if is_false
+      |No
+    |Contact Pers.
+template(name= "title_filter")
+  .btn.btn-default.do-toggle
+    .glyphicon(class=glyphicon_boolean)
+    if is_true
+      |Has
+    else if is_false
+      |No
+    |Title
+template(name= "brand_filter")
+  .btn.btn-default.do-toggle
+    .glyphicon(class=glyphicon_boolean)
+    if is_true
+      |Has
+    else if is_false
+      |No
+    | Brand
+template(name= "is_trashed")
+  .btn.btn-default.do-toggle
+    .glyphicon(class=glyphicon_boolean)
+    if is_true
+      |Trashed
+    else if is_false
+      |Not Trashed
+    else 
+      |Ignore Trash
+template(name= "evaluated_filter")
+   .btn.btn-default.btn-lg.do-toggle
+    if is_true
+      |Evaluated Submissions Only
+    else if is_false
+      |Not Evaluated Submissions
+    else 
+      | All Submissions

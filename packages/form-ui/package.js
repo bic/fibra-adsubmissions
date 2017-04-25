@@ -84,8 +84,8 @@ Package.onUse(function(api) {
     'woofmark_strings.coffee',
 
     'debug_form_wrapper.jade',
-    'debug_form_wrapper.coffee'
-    
+    'debug_form_wrapper.coffee',
+    'filters.coffee'
     ], ['client']);
   
 
@@ -104,7 +104,7 @@ Package.onUse(function(api) {
     'switch.jade',
     'switch.coffee',
     'file_uploader.jade',
-    'file_uploader.coffee'
+    'file_uploader.coffee',
 
 
 

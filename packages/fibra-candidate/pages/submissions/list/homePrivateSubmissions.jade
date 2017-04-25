@@ -38,6 +38,7 @@ template(name="new_submission")
     .glyphicon.glyphicon-plus
     | Add a submission
   .clearfix
+
 template(name="submission_link")
     li.list-group-item
       .col-md-5
@@ -50,28 +51,12 @@ template(name="submission_link")
         .btn.btn-default.do-show-preview.pull-right
           |Preview
       .col-md-3
-        if review_requested
-          .label.label-info Submitted for review #{review_request_time}
-          unless retract_confirm
-            .btn.btn-default.btn-sm.do-confirm-unrequest-review
-              | Retract Submission
-          else
-            table.table.table-condensed
-              tbody
-                tr.warning
-                  td(colspan="3") Retract review request?
-                tr
-                  td
-                    .btn.btn-default.btn-sm.do-unconfirm-unrequest-review
-                      | No
-                  td
-                  td
-                    .btn.btn-danger.btn-sm.do-unrequest-review
-                      | Yes
-            
-        else
-          .btn.btn-primary.do-request-review
-            | Submit for Review
+        if has_review
+          +review_message_btn
+        else 
+          +submit_for_review_btn
+        
+
       .col-md-2
         if trashed
           .btn.btn-default.pull-right.do-untrash
@@ -79,8 +64,48 @@ template(name="submission_link")
         else
           .btn.btn-default.pull-right.do-trash
             .glyphicon.glyphicon-trash
-
-        if draft
+        if trashed
+          .pull-right.label.label-default Trashed
+        else if draft
           .pull-right.label.label-default draft
         .clearfix
       .clearfix
+template(name="submit_for_review_btn")
+    if review_requested
+      .label.label-info Submitted for review #{review_request_time}
+      unless retract_confirm
+        .btn.btn-default.btn-sm.do-confirm-unrequest-review
+          | Retract Submission
+      else
+        table.table.table-condensed
+          tbody
+            tr.warning
+              td(colspan="3") Retract review request?
+            tr
+              td
+                .btn.btn-default.btn-sm.do-unconfirm-unrequest-review
+                  | No
+              td
+              td
+                .btn.btn-danger.btn-sm.do-unrequest-review
+                  | Yes
+        
+    else
+      .btn.btn-primary.do-request-review
+        if btn_label
+          |#{btn_label}
+        else
+          | Submit for Review
+
+template(name="review_box_with_request_for_review")
+  +review_box
+  with data
+    +submit_for_review_btn same_ctx btn_label="Send new Request for Review"
+template(name='review_message_btn')
+  .btn.do-show-messages(class=review_btn_class)
+    | FIBRA Review Messages
+
+
+
+
+

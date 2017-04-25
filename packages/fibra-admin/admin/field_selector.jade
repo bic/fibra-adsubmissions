@@ -1,0 +1,28 @@
+template(name='field_selector')
+  .btn.btn-default(style="min-width:200px;")
+    | Search in #{search_domain_name}
+  .btn.btn-default.dropdown-toggle(type="button" id="dropdownMenu2" data-toggle="dropdown")
+    span.caret
+  ul.dropdown-menu
+    with dropdown_content_ctx
+      +field_selector_dropdown_content
+template(name="field_selector_dropdown_content")
+  each fields
+    li.list-group-item
+      span.do-select.glyphicon(class=glyphicon_classes)
+      | #{name}
+      if has_children
+        if expand_children
+          if show_btn
+            .btn.btn-xs.btn-default.do-expand-children.active(class=expand_btn_class)
+              span.caret
+              //&hellip;
+          ul
+            with subfields
+              +field_selector_dropdown_content
+          
+        else
+          .btn.btn-xs.btn-default.do-expand-children(class=expand_btn_class)
+            span.caret
+            //&hellip;
+

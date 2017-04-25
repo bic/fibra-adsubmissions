@@ -79,7 +79,7 @@ Meteor.startup ->
     controllers = _.pick glob , "Basics,Credits,Media,OtherContributors,Presentation,SubmissionCredits,Production,FilesUpload,AllSubmissions,UserSettingsProfileController,Preview".split(',').map (name)->"SubmissionsCandidateEdit#{name}Controller"
     _.extend controllers, 
       HomePrivateController: HomePrivateController
-    console.log "installing Subscriptions on: #{_.keys controllers}"
+    #console.log "installing Subscriptions on: #{_.keys controllers}"
     for key, controller of controllers
       controller::onSubscribe ->
         return [
@@ -88,10 +88,22 @@ Meteor.startup ->
           Meteor.subscribe 'Sections'
           Meteor.subscribe 'Contacts'
           Meteor.subscribe 'submission_files'
+          if this.params.id and Meteor.users.isAdmin(Meteor.userId())
+            #debugger
+            Meteor.subscribe 'admin_submissions', this.params.id
+          
           {
             ready:->
-              debugger
+              #debugger
               app_json.isReady()
           }
         ]
+    JurySubmissionsController::onSubscribe ->
+      return [
+        Meteor.subscribe 'Sections'
+        Meteor.subscribe 'Categories'
+        Meteor.subscribe 'stats'
+        Meteor.subscribe 'Tags'
+         
+      ]
 

@@ -8,11 +8,20 @@ template(name="UserSettingsProfile")
 template(name="UserSettingsProfileEditForm")
   h2 Profile edit
 
-  
-  +submitting_entity
+  if is_juror
+    form.form-inline
+      label 
+        | Name
+        .form-control-static userName
+    
+
 
   
-  +invoice_data
+  else
+    +submitting_entity
+
+  
+    +invoice_data
 
 
 

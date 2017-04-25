@@ -1,0 +1,35 @@
+template(name='category_selector')
+  each categories
+    .col-md-12.category-filter
+      //.btn-group
+      .btn.btn-default.btn-xs.do-toggle-category-filter
+        |#{name}
+        each tags
+          .label.label-info
+            |#{count}#{abbrev}
+        .pull-right
+          .glyphicon(class=glyphicon)
+          .label.label-info #{entries }
+        
+      //.btn.btn-default.btn-xs
+        span.caret
+      +section_selector same_ctx category_id=_id
+
+template(name='section_selector')
+  
+  .col-md-12.section-filters
+    .well
+      each sections
+        .btn-group
+          .btn.btn-default.btn-xs.do-toggle-section-filter
+            | #{short_name}
+            each tags
+              .label.label-info
+                |#{count}#{abbrev}
+            .pull-right
+              .glyphicon(class=glyphicon)
+              .label.label-info #{entries}
+          
+          .btn.btn-xs.do-toggle-section-sort(class=section_sort_btn_class)
+            .glyphicon.glyphicon-sort-by-order
+        br

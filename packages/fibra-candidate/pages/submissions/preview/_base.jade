@@ -1,12 +1,13 @@
 template(name="_display_base")
 template(name="preview_modal")
   .modal.fade(tabindex="-1")
-    .modal-dialog.modal-lg
+    .modal-dialog.modal-xl
       .modal-content
-        .modal-header
-          button.close(type="button" data-dismiss="modal" aria-label="Close")
-           span(aria-hidden="true") &times;
-          h1.modal-title Preview
+        if title
+          .modal-header
+            button.close(type="button" data-dismiss="modal" aria-label="Close")
+             span(aria-hidden="true") &times;
+            h1.modal-title #{title}
         .modal-body
           +Template.dynamic template=template data=data
         .modal-footer

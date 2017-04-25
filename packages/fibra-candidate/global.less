@@ -42,9 +42,9 @@ label {
     from { transform: scale(1) rotate(0deg);}
     to { transform: scale(1) rotate(360deg);}
 }
-
-.file-content-display {
-height: 450px;
+/*
+.fullscreen-on-click {
+  height: 450px;
   .img-responsive {
       margin:auto;
       display: block;
@@ -52,6 +52,21 @@ height: 450px;
       width: auto;
       max-width:initial;// 100%;
       max-height: 100%
+  }
 }
+*/
+.fullscreen-on-click:-webkit-full-screen {
+      width: auto !important;
+      height: auto !important;
+      margin:auto !important;
 }
-
+.fullscreen-on-click:-moz-full-screen {
+      width: auto !important;
+      height: auto !important;
+      margin:auto !important;
+}
+.fullscreen-on-click:-ms-fullscreen {
+  width: auto !important;
+  height: auto !important;
+  margin:auto !important;
+}    

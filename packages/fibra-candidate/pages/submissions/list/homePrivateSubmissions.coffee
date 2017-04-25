@@ -50,6 +50,7 @@ do(tmpl=Template.homePrivateSubmissions)->
       inst.show_trashed.set(not inst.show_trashed.get())
     
 
+
 do(tmpl=Template.submission_link)->
 
   helpers=
@@ -62,18 +63,15 @@ do(tmpl=Template.submission_link)->
     edit_link: -> "submissions.candidate_edit.basics"
     edit_data: -> 
       id:@_id
-    review_requested:->
-      @review_request?
-    review_request_time:->
-      moment(@review_request).fromNow()
-    retract_confirm:(inst)->inst.show_confirm_unrequest_review.get()
+    has_review:->
+      debugger
+      @reviews?.length >0
+   
   tmpl.instance_helpers helpers
   
-  tmpl.onCreated ->
-     @show_confirm_unrequest_review = new ReactiveVar(false)
+  
   tmpl.events
     'click .do-trash':(e,inst)->
-      debugger 
       Submissions.update _.pick(this, ['_id'] ),
           $set:
             trashed:true
@@ -86,6 +84,41 @@ do(tmpl=Template.submission_link)->
           $set:
             draft:@draft
         
+    
+    'click .do-show-preview':(e,tmpl)->
+      data= Blaze.getData(e.currentTarget)
+      Modal.show 'preview_modal' , ->
+        template: 'preview_all'
+        data: 
+          data: Submissions.findOne data._id
+          show_message_composer:false
+do(tmpl=Template.review_message_btn)->
+  helpers= 
+    review_btn_class:(inst)->
+      'btn-primary'
+  tmpl.instance_helpers helpers
+  tmpl.events
+    'click .do-show-messages': (e,tmpl)->
+      data= Blaze.getData(e.currentTarget)
+      Modal.show 'preview_modal', ->
+          template: 'review_box_with_request_for_review'
+          title:"Review Messages from the FIBRA organizers"
+          data: 
+            data: Submissions.findOne data._id
+            show_message_composer:false
+
+do(tmpl= Template.submit_for_review_btn)->
+  tmpl.onCreated ->
+     @show_confirm_unrequest_review = new ReactiveVar(false) 
+  helpers=
+    review_requested:->
+      @review_request?
+    review_request_time:->
+      moment(@review_request).fromNow()
+    retract_confirm:(inst)->inst.show_confirm_unrequest_review.get()
+
+  tmpl.instance_helpers helpers
+  tmpl.events
     'click .do-request-review': (e,inst)->
       Submissions.update _.pick(this,['_id']),
         $set:
@@ -102,13 +135,5 @@ do(tmpl=Template.submission_link)->
       inst.show_confirm_unrequest_review.set true 
     'click .do-unconfirm-unrequest-review': (e,inst)->
       inst.show_confirm_unrequest_review.set false
-    'click .do-show-preview':(e,tmpl)->
-      data= Blaze.getData(e.currentTarget)
-      Modal.show 'preview_modal' , 
-        template: 'preview_all'
-        data: 
-          data: data
-      debugger
-
 
        

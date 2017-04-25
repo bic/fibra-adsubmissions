@@ -24,9 +24,10 @@ template(name="file_display")
   with file
     .well.file-content-display
       if isImage
-        img.img-responsive(src=url)
+        | Click for full screen
+        img.fullscreen-on-click.img-responsive(src=url)
       else if isVideo 
-        video.img-responsive(controls="controls") 
+        video.img-responsive(controls="controls" preload='none') 
           source(src=url)
           | Your browser does not support the video tag.
       else if isAudio
@@ -34,7 +35,8 @@ template(name="file_display")
           source(src=url)
           | Your browser does not support the video tag.
       else
-        embed(src=url height="100%" width="100%")
+        | Click for full screen
+        embed.fullscreen-on-click(src=url height="100%" width="100%")
     a.label.label-default(href=url download=name target="_blank")
       //was name 
       .glyphicon.glyphicon-download-alt

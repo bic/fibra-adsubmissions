@@ -109,6 +109,9 @@ Package.onUse(function(api) {
   api.addFiles('components/submitting_entity/ss.coffee', 'client')
   api.addPages( 'view','client','components/submitting_entity/');
 
+  api.addPages( ['tristate', 'tags', 'sections'],'client','components/filters/');
+  api.addPages( 'sorters','client','components/sorters/');
+
   api.addFiles('accounts-config.coffee', 'server')
   api.use('accounts-base', 'server')
   //components reused on pages

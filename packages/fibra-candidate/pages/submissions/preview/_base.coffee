@@ -14,8 +14,15 @@ do(tmpl=Template._display_base)->
       else
         return field
 do(tmpl=Template.preview_modal)->
+  tmpl.onRendered ->
+    if _.isFunction @data.onRendered
+      @data.onRendered.call this
   helpers=
-    dynamic_template_ctx:->
+    title: -> 
+      debugger
+      @title or "Preview"
+
+  tmpl.helpers helpers
 do(tmpl=Template.object_display)->
   
   helpers=

@@ -1,0 +1,14 @@
+template(name='tags_filter')
+  input.form-control(type=text)
+template(name="tags_filter_option_create")
+  with data
+    |Include 
+    strong #{input}
+    &hellip;
+    //|&nbsp;
+      .btn.btn-xs.btn-default
+        | Exclude
+        strong #{input}
+
+
+

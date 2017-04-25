@@ -30,17 +30,7 @@ template(name='invoice_data')
           .well
             | The entered Vat-ID has been found in the 
             a(href = 'http://openapi.ro' target="_blank") OpenApi database:
-            dl.dl-horizontal
-              dt Name:
-              dd #{name}
-              dt VAT Status:
-              dd #{vat_to_text}
-              dt Street/No
-              dd #{address}
-              dt City
-              dd #{city}
-              dt Zip
-              dd #{zip}
+            +invoice_data_dl
             .btn.btn-default.do-replace Replace Existing Data
             .btn.btn-default.do-ignore Ignore
 
@@ -52,3 +42,15 @@ template(name='invoice_data')
           +afFormGroup formgroup-class='col-md-6' name='company.zip'
           button.pull-right.btn.btn-lg.btn-primary(type="submit") Save Invoice Data
           .clearfix
+template(name='invoice_data_dl')
+  dl.dl-horizontal
+    dt Name:
+    dd #{name}
+    dt VAT Status:
+    dd #{vat_to_text}
+    dt Street/No
+    dd #{address}
+    dt City
+    dd #{city}
+    dt Zip
+    dd #{zip}

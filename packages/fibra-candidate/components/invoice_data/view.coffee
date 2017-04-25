@@ -153,12 +153,7 @@ do(tmpl= Template.invoice_data) ->
           @searching.set false
           @show_extended_view.set true  
   helpers=
-    vat_to_text:->
-      ret= vat_options.filter (opt)=> opt.value==@vat
-      if ret.length
-        return ret[0].label
-      else
-        return "N/A"
+    
     invalid_cif: (inst)-> inst.valid_cif.get()==false
     valid_cif: (inst)-> inst.valid_cif.get()==true
      
@@ -201,8 +196,15 @@ do(tmpl= Template.invoice_data) ->
         $unset:
           'profile.company':1
       tmpl.show_extended_view.set( false)
-      
-      
+do(tmpl=Template.invoice_data_dl)->
+  helpers=
+    vat_to_text:->
+      ret= vat_options.filter (opt)=> opt.value==@vat
+      if ret.length
+        return ret[0].label
+      else
+        return "N/A"
+  tmpl.helpers helpers
       
 
 

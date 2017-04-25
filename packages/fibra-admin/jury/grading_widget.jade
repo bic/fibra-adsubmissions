@@ -1,0 +1,159 @@
+template(name="grading_widget")
+  table.grading.table-striped.table-compact.table-bordered
+    thead
+      tr 
+        th
+        th.overall
+          |Overall
+          .btn.btn-default.btn-sm.do-toggle-expand-columns
+            |criteria
+            .glyphicon(class=column_expand_class)
+        if expand_columns
+          th.originality
+            |Originality
+          th.context
+            |Context
+          th.execution
+            |Execution
+    tbody
+      with sections
+        if has_more_than_one_section
+          tr
+            th.overall.section
+              |Overall
+              .btn.btn-default.btn-sm.do-toggle-expand-rows
+                | sections
+                .glyphicon(class=row_expand_class)
+            with same_ctx submission=submission_id show_others=show_others
+              +overall_total_td
+              if expand_columns
+                +overall_criteria_grade_td same_ctx name="originality" 
+                +overall_criteria_grade_td same_ctx name="context"  
+                +overall_criteria_grade_td same_ctx name="execution" 
+        each .
+          with same_ctx section=name show_others=show_others
+            if show_section_grades
+              tr.section
+                td.section
+                  |#{name}
+                  if show_tags
+                    br
+                    +tag_editor
+                +overall_categories_grade_td same_ctx submission=submission_id show_others=show_others
+                if expand_columns
+                  +evaluation_grade_td same_ctx name='originality' submission=submission_id show_others=show_others
+                  +evaluation_grade_td same_ctx name='context' submission=submission_id show_others=show_others
+                  +evaluation_grade_td same_ctx name='execution' submission=submission_id show_others=show_others
+template(name="tag_editor")
+  .btn.btn-default.btn-xs.dropdown-toggle(id=_id data-toggle="dropdown")
+    .glyphicon.glyphicon-plus
+    |tag
+    span.caret
+  ul.dropdown-menu
+    if show_shortlist
+      li 
+        .btn.btn-xs.btn-default.do-add-shortlist 
+          .glyphicon.glyphicon-plus
+          |Shortlist
+    if show_hold
+      li 
+        .btn.btn-xs.btn-default.do-add-gold
+          .glyphicon.glyphicon-plus
+          |Gold
+    if show_bronze
+      li 
+        .btn.btn-xs.btn-default.do-add-bronze
+          .glyphicon.glyphicon-plus
+          | Bronze
+    if show_silver
+      li 
+        .btn.btn-default.btn-xs.do-add-silver
+          .glyphicon.glyphicon-plus
+          | Silver
+    if show_grand_fibra
+      li 
+        .btn.btn-default.btn-xs.do-add-grand_fibra
+          .glyphicon.glyphicon-plus
+          | Grand FIBRA
+      
+  each tags
+    .label.label-default 
+      |#{title} 
+      &#124;
+      .glyphicon.glyphicon-trash.do-remove
+template(name="evaluation_grade_td")
+  td(class=name)
+    input.form-control(value=grade placeholder=placeholder)
+    if show_others
+      br 
+      +other_grades
+template(name="overall_categories_grade_td")
+  td.form-inline
+    if same_values
+      input.form-control(value=mean)
+    else
+      .form-control-static #{mean}
+      | &nbsp; Set 
+      span.btn-group
+        .btn.btn-xs.btn-default.do-set-min min
+        .btn.btn-xs.btn-default.do-set-avg avg
+        .btn.btn-default.btn-xs.do-set-max max
+    .btn.btn-default.btn-xs.do-unset Unset
+    if show_others
+      br 
+      +other_grades_section_overall
+template(name="overall_criteria_grade_td")
+  td.form-inline
+    if same_values
+      input.form-control(value=mean)
+    else
+      .form-control-static #{mean}
+    //if show_others
+      br 
+      span.badge 10
+      small.other_grades
+        |D:10
+        br
+        |L:10 N:10 
+        br
+        |П:10 P:10 
+        br
+        |R:10 W:10 
+template(name="overall_total_td")
+  td.overall.form-inline
+    if same_values
+      input.form-control(value=mean)
+    else
+      .form-control-static #{mean}
+    .btn.btn-default.btn-xs.do-unset Unset
+    if show_others
+      br 
+      +other_grades_overall_total
+template(name='other_grades_overall_total')
+  span.badge(data-toggle='tooltip' title= "Average for all sections over all criteria")  #{avg}
+  small.other_grades
+    each rows
+      if is_br
+        br
+      else
+        each fields
+          span(data-toggle='tooltip' title= tooltip) #{initial}:#{grade} 
+
+template(name='other_grades_section_overall')
+  span.badge(data-toggle='tooltip' title= "Average over all criteria of this section")  #{avg}
+  small.other_grades
+    each rows
+      if is_br
+        br
+      else
+        each fields
+          span(data-toggle='tooltip' title= tooltip) #{initial}:#{grade} 
+template(name='other_grades')
+  span.badge(data-toggle='tooltip' title= "Average over all criteria of this section")  #{avg}
+  small.other_grades
+    each rows
+      if is_br
+        br
+      else
+        each fields
+          span(data-toggle='tooltip' title= tooltip) #{initial}:#{grade} 

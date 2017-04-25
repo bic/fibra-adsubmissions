@@ -1,0 +1,14 @@
+template(name="_sort_base")
+  | Don't render this, Inherit!
+template(name="alpha_sort_option")
+  span.btn.do-toggle(class=active_class)
+    .glyphicon(class=glyphicon_class)
+    with nested_sort_index
+      small
+        span.badge.pull-left #{.}
+template(name="numeric_sort_option")
+  span.btn.do-toggle(class=active_class)
+    .glyphicon(class=glyphicon_class)
+    with nested_sort_index
+      small 
+        span.badge.pull-left #{.}

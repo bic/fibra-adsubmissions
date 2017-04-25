@@ -2,8 +2,9 @@ do(tmpl= Template.submissionsCandidateEditPreview)->
   helpers= {}
   tmpl.onRendered ->
     user_doc= Meteor.users.findOne Meteor.userId()
-    if (not user_doc?.profile?.hints?.preview_next?) or user_doc.profile.hints.preview_next
-      Modal.show 'whats_next_preview'
+    unless Package["gwendall:impersonate"]?.Impersonate?.active()
+      if (not user_doc?.profile?.hints?.preview_next?) or user_doc.profile.hints.preview_next
+        Modal.show 'whats_next_preview'
   tmpl.instance_helpers helpers
   tmpl.inheritsHelpersFrom "_ss_base" 
   tmpl.inheritsHooksFrom '_ss_base'
